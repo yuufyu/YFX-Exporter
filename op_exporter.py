@@ -1,7 +1,6 @@
 import bpy
 
-from .exporter import Exporter
-from .process import MainProcess
+from .process import run_export_process
 
 
 class YFX_EXPORTER_OT_export_fbx(bpy.types.Operator) :
@@ -14,10 +13,6 @@ class YFX_EXPORTER_OT_export_fbx(bpy.types.Operator) :
         return context.mode == "OBJECT"
 
     def execute(self, context : bpy.types.Context) -> set:
-        exporter = Exporter(MainProcess())
-
-        # TODO(yuufyu): Add run in background process
-        # https://yuufyu.atlassian.net/browse/YUUFYU-21?atlOrigin=eyJpIjoiNGFmZGZiM2I4MWVlNDk5ZGI2Mjc1ZTc2YjE1NWJlNjEiLCJwIjoiaiJ9
-        exporter.export(context)
+        run_export_process(context)
 
         return {"FINISHED"}
