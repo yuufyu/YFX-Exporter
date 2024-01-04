@@ -160,4 +160,4 @@ cython_debug/
 #.idea/
 
 .vscode/
-tests/blender/*.blend[0-9]*
+*.blend[0-9]*
