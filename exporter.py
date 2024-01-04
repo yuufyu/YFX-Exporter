@@ -3,7 +3,7 @@ from typing import Generator
 import bpy
 import bpy_types
 
-from .modifier import apply_modifiers
+from .modifier import main_apply_modifiers
 from .process import Process
 
 
@@ -49,7 +49,7 @@ def apply_objects(context : bpy_types.Context) -> None:
                 convert_to_mesh(context, obj)
 
             if obj.type == "MESH" :
-                apply_modifiers(obj)
+                main_apply_modifiers(obj)
 
 def get_merge_parents(collection_names : set,
                       parent_collection : bpy.types.Collection) \
@@ -76,6 +76,9 @@ class Exporter :
         # Check file path error
         if settings.export_settings == "" :
             return
+
+        # Select collection for working
+        context.view_layer.active_layer_collection = context.view_layer.layer_collection
 
         # Convert object to mesh and Apply modifiers
         apply_objects(context)
