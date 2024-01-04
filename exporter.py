@@ -20,3 +20,4 @@ class Exporter :
         main_merge_objects(context, export_settings.collections)
 
         # Export to fbx
+

@@ -5,6 +5,8 @@ import bpy
 import bpy_extras
 import bpy_types
 
+from .process import run_export_process
+
 
 def list_actions_move(items : bpy.types.AnyType, index : int, action : str) -> str:
     idx = index
@@ -163,5 +165,20 @@ class YFX_EXPORTER_OT_add_collection(bpy.types.Operator) :
             info = "%s added to list" % (item.name)
 
         self.report({"INFO"}, info)
+
+        return {"FINISHED"}
+
+
+class YFX_EXPORTER_OT_export_fbx(bpy.types.Operator) :
+    bl_idname = "yfx_exporter.export_fbx"
+    bl_label = "Export FBX"
+    bl_description = "Export FBX"
+
+    @classmethod
+    def poll(cls, context : bpy.types.Context) -> bool:
+        return context.mode == "OBJECT"
+
+    def execute(self, context : bpy.types.Context) -> set:
+        run_export_process(context)
 
         return {"FINISHED"}
