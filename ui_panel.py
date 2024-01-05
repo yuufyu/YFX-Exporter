@@ -56,6 +56,7 @@ class YFX_EXPORTER_PT_fbx_export_settings_main_panel(View3dSidePanel, bpy.types.
     bl_label = "FBX settings"
     bl_idname = "YFX_EXPORTER_PT_fbx_export_settings_main_panel"
     bl_parent_id = "YFX_EXPORTER_PT_export_panel"
+    bl_options = {"DEFAULT_CLOSED"}  # noqa: RUF012
 
     def draw(self, context : bpy_types.Context) -> None:
         scn = context.scene
@@ -246,7 +247,7 @@ class YFX_EXPORTER_PT_collection_setting_panel(View3dSidePanel, bpy.types.Panel)
                 col.box().label(text = "error", icon = "ERROR")
             else :
                 col.prop(item.transform_settings,
-                         "apply_transform", text = "Apply Transform")
+                         "apply_all_transform", text = "Apply All Transform")
 
                 col.separator()
 

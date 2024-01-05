@@ -12,7 +12,7 @@ class YFX_EXPORTER_PG_shapekey_settings(bpy.types.PropertyGroup):
     separate_mmd_shapekey : bpy.props.BoolProperty(default = True)
 
 class YFX_EXPORTER_PG_transform_settings(bpy.types.PropertyGroup):
-    apply_transform : bpy.props.BoolProperty(default = True)
+    apply_all_transform : bpy.props.BoolProperty(default = False)
 
 class YFX_EXPORTER_PG_vertex_group_settings(bpy.types.PropertyGroup):
     delete_vertex_group : bpy.props.BoolProperty(default = True)
