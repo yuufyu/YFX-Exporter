@@ -37,8 +37,7 @@ def apply_all_modifiers(obj: bpy.types.Object) -> None:
                 bpy.context.view_layer.objects.active = obj
                 try:
                     bpy.ops.object.modifier_apply(modifier=m.name)
-                except RuntimeError as e:
-                    print(f"Error applying {m.name} to {obj.name}: {e}")
+                except RuntimeError:
                     obj.modifiers.remove(m)
         else:
             obj.modifiers.remove(m)
