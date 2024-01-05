@@ -13,11 +13,18 @@ class Exporter :
         export_settings = settings.export_settings
 
         # Check file path error
-        if settings.export_settings == "" :
+        if export_settings.export_path == "" :
+            print("[ERROR]Input FBX export path.")
             return
 
         # Merge objects
         main_merge_objects(context, export_settings.collections)
 
         # Export to fbx
-
+        fbx_export_settings = export_settings.fbx_export_settings
+        keyargs_dict = {key : getattr(fbx_export_settings,key,None)
+         for key in fbx_export_settings.__annotations__}
+        bpy.ops.export_scene.fbx(
+            filepath=export_settings.export_path,
+            **keyargs_dict,
+        )

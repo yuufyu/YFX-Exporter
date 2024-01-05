@@ -35,21 +35,21 @@ class YFX_EXPORTER_PG_collection_settings(bpy.types.PropertyGroup):
 class YFX_EXPORTER_PG_fbx_export_settings(bpy.types.PropertyGroup):
     """ @see https://github.com/blender/blender-addons/blob/main/io_scene_fbx/__init__.py
     """
-    # use_selection: bpy.props.BoolProperty(
-    #         name="Selected Objects",
-    #         description="Export selected and visible objects only",
-    #         default=False,
-    #         )
-    # use_visible: bpy.props.BoolProperty(
-    #         name="Visible Objects",
-    #         description="Export visible objects only",
-    #         default=False,
-    #         )
-    # use_active_collection: bpy.props.BoolProperty(
-    #         name="Active Collection",
-    #         description="Export only objects from the active collection (and its children)",
-    #         default=False,
-    #         )
+    use_selection: bpy.props.BoolProperty( # Not configurable
+            name="Selected Objects",
+            description="Export selected and visible objects only",
+            default=False,
+            )
+    use_visible: bpy.props.BoolProperty(  # Not configurable
+            name="Visible Objects",
+            description="Export visible objects only",
+            default=False,
+            )
+    use_active_collection: bpy.props.BoolProperty( # Not configurable
+            name="Active Collection",
+            description="Export only objects from the active collection (and its children)",
+            default=False,
+            )
     global_scale: bpy.props.FloatProperty(
             name="Scale",
             description="Scale all data (Some importers do not support scaled armatures!)",
@@ -263,25 +263,26 @@ class YFX_EXPORTER_PG_fbx_export_settings(bpy.types.PropertyGroup):
             description='Embed textures in FBX binary file (only for "Copy" path mode!)',
             default=False,
             )
-    # batch_mode: bpy.props.EnumProperty(
-    #         name="Batch Mode",
-    #         items=(("OFF", "Off", "Active scene to file"),
-    #                ("SCENE", "Scene", "Each scene as a file"),
-    #                ("COLLECTION", "Collection",
-    #                 "Each collection (data-block ones) as a file, does not include content of children collections"),
-    #                ("SCENE_COLLECTION", "Scene Collections",
-    #                 "Each collection (including master, non-data-block ones) of each scene as a file, "
-    #                 "including content from children collections"),
-    #                ("ACTIVE_SCENE_COLLECTION", "Active Scene Collections",
-    #                 "Each collection (including master, non-data-block one) of the active scene as a file, "
-    #                 "including content from children collections"),
-    #                ),
-    #         )
-    # use_batch_own_dir: bpy.props.BoolProperty(
-    #         name="Batch Own Dir",
-    #         description="Create a dir for each exported file",
-    #         default=True,
-    #         )
+    batch_mode: bpy.props.EnumProperty(  # Not configurable
+            name="Batch Mode",
+            items=(("OFF", "Off", "Active scene to file"),
+                   ("SCENE", "Scene", "Each scene as a file"),
+                   ("COLLECTION", "Collection",
+                    "Each collection (data-block ones) as a file, does not include content of children collections"),
+                   ("SCENE_COLLECTION", "Scene Collections",
+                    "Each collection (including master, non-data-block ones) of each scene as a file, "
+                    "including content from children collections"),
+                   ("ACTIVE_SCENE_COLLECTION", "Active Scene Collections",
+                    "Each collection (including master, non-data-block one) of the active scene as a file, "
+                    "including content from children collections"),
+                   ),
+            default="OFF",
+            )
+    use_batch_own_dir: bpy.props.BoolProperty( # Not configurable
+            name="Batch Own Dir",
+            description="Create a dir for each exported file",
+            default=False,
+            )
     use_metadata: bpy.props.BoolProperty(
             name="Use Metadata",
             default=True,
