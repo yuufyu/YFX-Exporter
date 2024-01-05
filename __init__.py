@@ -26,7 +26,7 @@ bl_info = {
     "name": "YFX Exporter",
     "author": "yuufyu",
     "description": "A plugin for FBX export with additional processing \
-        like applying modifiers and object integration in a non-destructive way.",
+        like applying modifiers and merging objects in a non-destructive way.",
     "blender": (4, 0, 2),
     "version": (0, 0, 1),
     "location": "View 3D > SidePanel > YFX > YFX Exporter",
