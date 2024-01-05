@@ -36,5 +36,9 @@ def run_export_process(context: bpy.types.Context) -> None:
         )
 
 
-def start_background_process() -> None:
+def start_foreground_export(context: bpy.types.Context) -> None:
+    pass
+
+
+def start_background_export(context: bpy.types.Context) -> None:
     pass
