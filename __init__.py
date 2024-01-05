@@ -19,20 +19,22 @@ FBX exporter for character modeling.
 from . import auto_load
 
 bl_info = {
-    "name" : "YFX Exporter",
-    "author" : "yuufyu",
-    "description" : "",
-    "blender" : (4, 0, 2),
-    "version" : (0, 0, 1),
-    "location" : "View 3D > SidePanel > YFX(panel) > YFX Exporter",
-    "warning" : "",
-    "category" : "Import-Export",
+    "name": "YFX Exporter",
+    "author": "yuufyu",
+    "description": "",
+    "blender": (4, 0, 2),
+    "version": (0, 0, 1),
+    "location": "View 3D > SidePanel > YFX(panel) > YFX Exporter",
+    "warning": "",
+    "category": "Import-Export",
 }
 
 auto_load.init()
 
+
 def register() -> None:
     auto_load.register()
+
 
 def unregister() -> None:
     auto_load.unregister()

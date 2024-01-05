@@ -1,14 +1,14 @@
 import bpy
 
 
-def copy_object(obj : bpy.types.Object) -> bpy.types.Object:
+def copy_object(obj: bpy.types.Object) -> bpy.types.Object:
     copy_obj = obj.copy()
     copy_obj.data = obj.data.copy()
     bpy.context.collection.objects.link(copy_obj)
     return copy_obj
 
 
-def remove_object(obj : bpy.types.Object) -> None:
+def remove_object(obj: bpy.types.Object) -> None:
     mesh_data = obj.data
     bpy.data.objects.remove(obj)
     bpy.data.meshes.remove(mesh_data)
