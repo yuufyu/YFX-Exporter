@@ -4,6 +4,9 @@ import bpy_types
 from .merge_processor import main_merge_objects
 
 
+class ExportError(Exception):
+    pass
+
 class Exporter :
     """ Preprocess and Export file """
     def __init__(self) -> None:
@@ -14,8 +17,8 @@ class Exporter :
 
         # Check file path error
         if export_settings.export_path == "" :
-            print("[ERROR]Input FBX export path.")
-            return
+            error_msg = "Invalid FBX export path"
+            raise ExportError(error_msg)
 
         # Merge objects
         main_merge_objects(context, export_settings.collections)

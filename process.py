@@ -2,7 +2,8 @@ import abc
 
 import bpy
 
-from .exporter import Exporter
+from .exporter import Exporter, ExportError
+from .ui_panel import show_popup_message
 
 
 class Process(metaclass=abc.ABCMeta) :
@@ -11,22 +12,23 @@ class Process(metaclass=abc.ABCMeta) :
         raise NotImplementedError
 
 class MainProcess(Process) :
-    def report_info(self, message: str) -> None:
-        print(message)
+    pass
 
 class SubProcess(Process) :
-    def report_info(self, message: str) -> None:
-        print(message)
+    pass
+
+
 
 def run_export_process(context : bpy.types.Context) -> None:
     scn = context.scene
-    exporter = Exporter()
-    process = MainProcess()
-
     settings = scn.yfx_exporter_settings
-    process.report_info(f"path : {settings.export_settings.export_path}")
 
-    exporter.export(context, settings)
+    try :
+        exporter = Exporter()
+        exporter.export(context, settings)
+    except ExportError as e:
+        show_popup_message(context = context, message = str(e),
+                           title = "Export Error", icon = "ERROR")
 
 def start_background_process() -> None:
     pass

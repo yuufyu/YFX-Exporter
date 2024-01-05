@@ -2,6 +2,14 @@ import bpy
 import bpy_types
 
 
+def show_popup_message(context : bpy_types.Context, message : str = "",
+                 title :str = "Message Box", icon : str = "INFO") -> None:
+
+    def draw(self : bpy.types.Panel, context : bpy_types.Context) -> None:
+        self.layout.label(text=message)
+
+    context.window_manager.popup_menu(draw, title = title, icon = icon)
+
 class View3dSidePanel :
     bl_space_type = "VIEW_3D"
     bl_region_type = "UI"
