@@ -93,10 +93,10 @@ def get_register_deps_dict(modules):  # noqa: ANN202, ANN001
     return deps_dict
 
 
-def iter_my_register_deps(
-    cls,
-    my_classes,
-    my_classes_by_idname,
+def iter_my_register_deps(  # noqa: ANN202
+    cls,  # noqa: ANN001
+    my_classes,  # noqa: ANN001
+    my_classes_by_idname,  # noqa: ANN001
 ):
     yield from iter_my_deps_from_annotations(cls, my_classes)
     yield from iter_my_deps_from_parent_id(cls, my_classes_by_idname)
@@ -115,7 +115,7 @@ def get_dependency_from_annotation(value):  # noqa: ANN202, ANN001
             return value.keywords.get("type")
     elif (
         isinstance(value, tuple)
-        and len(value) == 2
+        and len(value) == 2  # noqa: PLR2004
         and value[0] in (bpy.props.PointerProperty, bpy.props.CollectionProperty)
     ):
         return value[1]["type"]
