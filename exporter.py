@@ -19,7 +19,7 @@ class Exporter:
 
         # Check file path error
         if export_settings.export_path == "":
-            error_msg = "Invalid FBX export path"
+            error_msg = "Invalid path"
             raise ExportError(error_msg)
 
         # Merge objects
