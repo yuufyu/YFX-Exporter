@@ -146,7 +146,13 @@ def get_collection_list_callback(
     export_settings = scn.yfx_exporter_settings.export_settings
     custom_collections = [c[1].name for c in export_settings.collections.items()]
     return [
-        (c.name, c.name, c.name, "OUTLINER_COLLECTION", idx)
+        (
+            c.name,
+            c.name + " ",  # Append a space for non-translatable version
+            c.name,
+            "OUTLINER_COLLECTION",
+            idx,
+        )
         for idx, c in enumerate(bpy.data.collections)
         if c.name not in custom_collections and bpy.context.scene.user_of_id(c)
     ]

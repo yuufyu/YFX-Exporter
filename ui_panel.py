@@ -46,6 +46,7 @@ class YFX_EXPORTER_UL_colllection(bpy.types.UIList):
             item.collection_ptr,
             "name",
             text="",
+            translate=False,
             emboss=False,
             icon="OUTLINER_COLLECTION",
         )
