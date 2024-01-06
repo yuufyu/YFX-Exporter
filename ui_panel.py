@@ -262,7 +262,7 @@ class YFX_EXPORTER_PT_collection_panel(View3dSidePanel, bpy.types.Panel):
         col = row.column(align=True)
         row = col.row(align=True)
         row.operator_menu_enum(
-            "YFX_EXPORTER_OT_add_collection",
+            "yfx_exporter.add_collection",
             "user_collections",
             text="Add Collection",
             icon="ADD",
