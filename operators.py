@@ -154,9 +154,7 @@ def get_collection_list_callback(
 ) -> list:
     scn = context.scene
     export_settings = scn.yfx_exporter_settings.export_settings
-    custom_collections = [
-        c[1].collection_ptr.name for c in export_settings.collections.items()
-    ]
+    custom_collections = [c.collection_ptr.name for c in export_settings.collections]
     return [
         (
             c.name,
