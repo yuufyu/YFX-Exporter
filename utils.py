@@ -13,3 +13,5 @@ def remove_all_invalid_items(
     ]
     for i in remove_indices:
         items.remove(i)
+    current_index = export_settings.collection_index
+    export_settings.collection_index = max(0, current_index - len(remove_indices))
