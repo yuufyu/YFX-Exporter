@@ -8,7 +8,7 @@ import bpy_types
 from .process import run_export_process
 
 
-def list_actions_move(items: bpy.types.AnyType, index: int, action: str) -> str:
+def list_actions_move(items: bpy.types.AnyType, index: int, action: str) -> tuple:
     idx = index
 
     try:
@@ -16,24 +16,33 @@ def list_actions_move(items: bpy.types.AnyType, index: int, action: str) -> str:
     except IndexError:
         info = "Out of range"
     else:
-        if action == "DOWN" and idx < len(items) - 1:
+        if item.collection_ptr is None:
+            index -= 1
+            items.remove(idx)
+        elif action == "DOWN" and idx < len(items) - 1:
             items.move(idx, idx + 1)
             index += 1
-            info = 'Item "%s" moved to position %d' % (item.name, index + 1)
+            info = 'Item "%s" moved to position %d' % (
+                item.collection_ptr.name,
+                index + 1,
+            )
 
         elif action == "UP" and idx >= 1:
             items.move(idx, idx - 1)
             index -= 1
-            info = 'Item "%s" moved to position %d' % (item.name, index + 1)
+            info = 'Item "%s" moved to position %d' % (
+                item.collection_ptr.name,
+                index + 1,
+            )
 
         elif action == "REMOVE":
-            info = 'Item "%s" removed from list' % (items[idx].name)
+            info = 'Item "%s" removed from list' % (item.collection_ptr.name)
             index -= 1
             items.remove(idx)
         else:
             info = "Unknown action"
 
-    return info
+    return index, info
 
 
 class YFX_EXPORTER_OT_list_actions(bpy.types.Operator):
@@ -57,13 +66,14 @@ class YFX_EXPORTER_OT_list_actions(bpy.types.Operator):
         scn = context.scene
         settings = scn.yfx_exporter_settings.export_settings
 
-        info = list_actions_move(
+        index, info = list_actions_move(
             settings.collections,
             settings.collection_index,
             self.action,
         )
 
         self.report({"INFO"}, info)
+        settings.collection_index = index
 
         return {"FINISHED"}
 
@@ -144,7 +154,9 @@ def get_collection_list_callback(
 ) -> list:
     scn = context.scene
     export_settings = scn.yfx_exporter_settings.export_settings
-    custom_collections = [c[1].name for c in export_settings.collections.items()]
+    custom_collections = [
+        c[1].collection_ptr.name for c in export_settings.collections.items()
+    ]
     return [
         (
             c.name,
@@ -179,14 +191,21 @@ class YFX_EXPORTER_OT_add_collection(bpy.types.Operator):
         settings = scn.yfx_exporter_settings.export_settings
         act_coll = get_collection_by_name(self.user_collections, context)
 
-        if act_coll.name in [c[1].name for c in settings.collections.items()]:
+        if act_coll is None:
+            message = "Selected Collection is Not founded"
+            self.report({"ERROR"}, message)
+            return {"CANCELLED"}
+
+        if act_coll.name in [
+            c[1].collection_ptr.name for c in settings.collections.items()
+        ]:
             info = '"%s" already in the list' % (act_coll.name)
         else:
             item = settings.collections.add()
             item.collection_ptr = act_coll
-            item.name = item.collection_ptr.name
+            # item.name = item.collection_ptr.name
             settings.collection_index = len(settings.collections) - 1
-            info = "%s added to list" % (item.name)
+            info = "%s added to list" % (item.collection_ptr.name)
 
         self.report({"INFO"}, info)
 

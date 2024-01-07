@@ -41,15 +41,16 @@ class YFX_EXPORTER_UL_colllection(bpy.types.UIList):
         active_propname: str,
         index: int,
     ) -> None:
-        row = layout.row()
-        row.prop(
-            item.collection_ptr,
-            "name",
-            text="",
-            translate=False,
-            emboss=False,
-            icon="OUTLINER_COLLECTION",
-        )
+        if item.collection_ptr:
+            row = layout.row()
+            row.prop(
+                item.collection_ptr,
+                "name",
+                text="",
+                translate=False,
+                emboss=False,
+                icon="OUTLINER_COLLECTION",
+            )
 
     def invoke(self, context: bpy_types.Context, event: bpy.types.Event) -> None:
         pass
