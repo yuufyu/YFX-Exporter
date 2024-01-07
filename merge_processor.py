@@ -68,7 +68,7 @@ def get_merge_parents(
 
 def main_merge_objects(
     context: bpy_types.Context,
-    collections: bpy.props.CollectionProperty,
+    collection_names: set,
 ) -> None:
     scn = context.scene
 
@@ -79,6 +79,5 @@ def main_merge_objects(
     apply_objects(context)
 
     # Merge objects
-    collection_names = {c.name for c in collections}
     for c in get_merge_parents(collection_names, scn.collection):
         merge_objects(context, c)
