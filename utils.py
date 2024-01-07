@@ -5,9 +5,8 @@ def remove_all_invalid_items(
     self: bpy.types.AnyType,
     context: bpy.types.Context,
 ) -> None:
-    if context and context.yfx_exporter_settings:
-        scn = context.scene
-        export_settings = scn.yfx_exporter_settings.export_settings
+    if context and context.scene.yfx_exporter_settings:
+        export_settings = context.scene.yfx_exporter_settings.export_settings
         items = export_settings.collections
         remove_indices = [
             i
