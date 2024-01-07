@@ -196,9 +196,7 @@ class YFX_EXPORTER_OT_add_collection(bpy.types.Operator):
             self.report({"ERROR"}, message)
             return {"CANCELLED"}
 
-        if act_coll.name in [
-            c[1].collection_ptr.name for c in settings.collections.items()
-        ]:
+        if act_coll.name in [c.collection_ptr.name for c in settings.collections]:
             info = '"%s" already in the list' % (act_coll.name)
         else:
             item = settings.collections.add()
