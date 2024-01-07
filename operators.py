@@ -148,26 +148,6 @@ class YFX_EXPORTER_OT_select_file(bpy.types.Operator, bpy_extras.io_utils.Export
         return {"FINISHED"}
 
 
-def get_collection_list_callback(
-    operator: bpy.types.Operator,
-    context: bpy_types.Context,
-) -> list:
-    scn = context.scene
-    export_settings = scn.yfx_exporter_settings.export_settings
-    custom_collections = [c.collection_ptr.name for c in export_settings.collections]
-    return [
-        (
-            c.name,
-            c.name + " ",  # Append a space for non-translatable version
-            c.name,
-            "OUTLINER_COLLECTION",
-            idx,
-        )
-        for idx, c in enumerate(bpy.data.collections)
-        if c.name not in custom_collections and bpy.context.scene.user_of_id(c)
-    ]
-
-
 def get_collection_by_name(
     name: str,
     context: bpy_types.Context,
@@ -181,6 +161,32 @@ def get_collection_by_name(
 class YFX_EXPORTER_OT_add_collection(bpy.types.Operator):
     bl_idname = "yfx_exporter.add_collection"
     bl_label = "Add Collection"
+
+    def get_collection_list_callback(
+        self: bpy.types.Operator,
+        context: bpy_types.Context,
+    ) -> list:
+        scn = context.scene
+        export_settings = scn.yfx_exporter_settings.export_settings
+        custom_collections = [
+            c.collection_ptr.name for c in export_settings.collections
+        ]
+
+        # There is a known bug with using a callback,
+        # Python must keep a reference to the strings returned by the callback
+        # or Blender will misbehave or even crash.
+        YFX_EXPORTER_OT_add_collection.collection_list_enum_items = [
+            (
+                c.name,
+                c.name + " ",  # Append a space for non-translatable version
+                c.name,
+                "OUTLINER_COLLECTION",
+                idx,
+            )
+            for idx, c in enumerate(bpy.data.collections)
+            if c.name not in custom_collections and bpy.context.scene.user_of_id(c)
+        ]
+        return YFX_EXPORTER_OT_add_collection.collection_list_enum_items
 
     user_collections: bpy.props.EnumProperty(items=get_collection_list_callback)
 
