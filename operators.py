@@ -205,7 +205,6 @@ class YFX_EXPORTER_OT_add_collection(bpy.types.Operator):
         else:
             item = settings.collections.add()
             item.collection_ptr = act_coll
-            # item.name = item.collection_ptr.name
             settings.collection_index = len(settings.collections) - 1
             info = "%s added to list" % (item.collection_ptr.name)
 
