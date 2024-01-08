@@ -63,8 +63,7 @@ def apply_objects(context: bpy_types.Context) -> None:
             if obj.type in ("CURVE", "FONT", "SURFACE"):
                 bpy.ops.object.convert(target="MESH")
 
-            if obj.type == "MESH":
-                main_apply_modifiers(obj)
+            main_apply_modifiers(obj)
 
 
 def get_merge_parents(
