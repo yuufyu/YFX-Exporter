@@ -23,11 +23,8 @@ class Exporter:
             raise ExportError(error_msg)
 
         # Merge objects
-        if len(export_settings.collections) > 0:
-            collection_names = {
-                c.collection_ptr.name for c in export_settings.collections
-            }
-            main_merge_objects(context, collection_names)
+        collection_names = {c.collection_ptr.name for c in export_settings.collections}
+        main_merge_objects(context, collection_names)
 
         # Export to fbx
         fbx_export_settings = export_settings.fbx_export_settings
