@@ -22,7 +22,7 @@ def transfer_shapekey(obj: bpy.types.Object, blendshape: bpy.types.Object) -> No
     bpy.ops.object.join_shapes()
 
 
-def apply_single_shapekey(obj: bpy.types.Object, index: int) -> None:
+def apply_shapekey(obj: bpy.types.Object, index: int) -> None:
     shapekeys = obj.data.shape_keys.key_blocks
     if 0 <= index < len(shapekeys):
         for i in reversed(range(len(shapekeys))):
@@ -48,7 +48,7 @@ def apply_modifiers_with_shapekeys(obj: bpy.types.Object) -> None:
     # Temp object that will contain all collapsed shapekeys
     temp_obj = copy_object(obj)
 
-    apply_single_shapekey(obj, 0)
+    apply_shapekey(obj, 0)
     apply_all_modifiers(obj)
 
     shapekeys_data = temp_obj.data.shape_keys
@@ -57,7 +57,7 @@ def apply_modifiers_with_shapekeys(obj: bpy.types.Object) -> None:
     for i in range(1, len(shapekeys_blocks)):
         blendshape_obj = copy_object(temp_obj)
 
-        apply_single_shapekey(blendshape_obj, i)
+        apply_shapekey(blendshape_obj, i)
         apply_all_modifiers(blendshape_obj)
 
         # Transfer shapekey to the original object
