@@ -6,10 +6,20 @@ import bpy_types
 from .modifier import main_apply_modifiers
 
 
+def make_all_unlink() -> None:
+    bpy.ops.object.duplicates_make_real(use_hierarchy=True)
+    bpy.ops.object.make_local(type="ALL")
+    bpy.ops.object.make_single_user(
+        type="ALL",
+        object=True,
+        obdata=True,
+        material=False,
+        animation=False,
+        obdata_animation=False,
+    )
+
+
 def convert_to_mesh(context: bpy_types.Context, obj: bpy.types.Object) -> None:
-    context.view_layer.objects.active = obj
-    bpy.ops.object.select_all(action="DESELECT")
-    obj.select_set(state=True)
     bpy.ops.object.convert(target="MESH")
 
 
@@ -42,12 +52,19 @@ def merge_objects(context: bpy_types.Context, collection: bpy.types.Collection) 
 
 def apply_objects(context: bpy_types.Context) -> None:
     scn = context.scene
+
+    bpy.ops.object.select_all(action="SELECT")
+    make_all_unlink()
+
     for obj in scn.objects:
-        if obj.visible_get():
+        if obj.visible_get() and obj.type in ("CURVE", "FONT", "SURFACE", "MESH"):
+            # Select Object
+            context.view_layer.objects.active = obj
+            bpy.ops.object.select_all(action="DESELECT")
+            obj.select_set(state=True)
+
             # Convert object to mesh
-            if obj.type == "CURVE":  # noqa: SIM114
-                convert_to_mesh(context, obj)
-            elif obj.type == "FONT":
+            if obj.type in ("CURVE", "FONT", "SURFACE"):
                 convert_to_mesh(context, obj)
 
             if obj.type == "MESH":
