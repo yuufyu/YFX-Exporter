@@ -51,8 +51,8 @@ def apply_modifiers_with_shapekeys(obj: bpy.types.Object) -> None:
     apply_shapekey(obj, 0)
     apply_all_modifiers(obj)
 
-    shapekeys_data = temp_obj.data.shape_keys
-    shapekeys_blocks = shapekeys_data.key_blocks
+    shapekeys_blocks = temp_obj.data.shape_keys.key_blocks
+    basis_name = shapekeys_blocks[0].name
 
     for i in range(1, len(shapekeys_blocks)):
         blendshape_obj = copy_object(temp_obj)
@@ -68,6 +68,8 @@ def apply_modifiers_with_shapekeys(obj: bpy.types.Object) -> None:
 
         # Delete the blendshape donor
         remove_object(blendshape_obj)
+
+    obj.data.shape_keys.key_blocks[0].name = basis_name
 
     # Delete temp object
     remove_object(temp_obj)
