@@ -53,17 +53,17 @@ def apply_all_objects(context: bpy_types.Context) -> None:
     make_all_unlink()
 
     for obj in scn.objects:
-        if obj.visible_get() and obj.type in ("CURVE", "FONT", "SURFACE", "MESH"):
-            # Select Object
-            context.view_layer.objects.active = obj
-            bpy.ops.object.select_all(action="DESELECT")
-            obj.select_set(state=True)
-
+        if obj.visible_get():
             # Convert object to mesh
             if obj.type in ("CURVE", "FONT", "SURFACE"):
+                # Select Object
+                context.view_layer.objects.active = obj
+                bpy.ops.object.select_all(action="DESELECT")
+                obj.select_set(state=True)
                 bpy.ops.object.convert(target="MESH")
 
-            main_apply_modifiers(obj)
+            if obj.type == "MESH":
+                main_apply_modifiers(obj)
 
 
 def get_merge_parents(
