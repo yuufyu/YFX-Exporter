@@ -19,10 +19,6 @@ def make_all_unlink() -> None:
     )
 
 
-def convert_to_mesh(context: bpy_types.Context, obj: bpy.types.Object) -> None:
-    bpy.ops.object.convert(target="MESH")
-
-
 def get_child_objects(collection: bpy.types.Collection) -> list:
     collections = [
         obj for obj in collection.objects if obj.visible_get() and obj.type == "MESH"
@@ -65,7 +61,7 @@ def apply_objects(context: bpy_types.Context) -> None:
 
             # Convert object to mesh
             if obj.type in ("CURVE", "FONT", "SURFACE"):
-                convert_to_mesh(context, obj)
+                bpy.ops.object.convert(target="MESH")
 
             if obj.type == "MESH":
                 main_apply_modifiers(obj)
