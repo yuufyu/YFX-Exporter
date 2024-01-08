@@ -64,6 +64,11 @@ def apply_all_objects(context: bpy_types.Context) -> None:
             if obj.type == "MESH":
                 main_apply_modifiers(obj)
 
+                # Normalize Basis name
+                shapekeys = obj.data.shape_keys
+                if shapekeys is not None and len(shapekeys.key_blocks) > 0:
+                    shapekeys.key_blocks[0].name = "Basis"
+
 
 def get_merge_collections(
     collection_names: set,
