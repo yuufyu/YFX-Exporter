@@ -1,7 +1,7 @@
 import bpy
 import bpy_types
 
-from .merge_processor import main_merge_objects
+from .merge import main_merge_objects
 
 
 class ExportError(Exception):
