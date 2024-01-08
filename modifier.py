@@ -9,9 +9,10 @@ def copy_object(obj: bpy.types.Object) -> bpy.types.Object:
 
 
 def remove_object(obj: bpy.types.Object) -> None:
-    mesh_data = obj.data
-    bpy.data.objects.remove(obj)
-    bpy.data.meshes.remove(mesh_data)
+    bpy.context.view_layer.objects.active = obj
+    bpy.ops.object.select_all(action="DESELECT")
+    obj.select_set(state=True)
+    bpy.ops.object.delete(use_global=False, confirm=False)
 
 
 def transfer_shapekey(obj: bpy.types.Object, blendshape: bpy.types.Object) -> None:
