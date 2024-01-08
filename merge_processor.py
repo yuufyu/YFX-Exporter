@@ -46,7 +46,7 @@ def merge_objects(context: bpy_types.Context, collection: bpy.types.Collection) 
         context.view_layer.objects.active.name = collection.name
 
 
-def apply_objects(context: bpy_types.Context) -> None:
+def apply_all_objects(context: bpy_types.Context) -> None:
     scn = context.scene
 
     bpy.ops.object.select_all(action="SELECT")
@@ -88,7 +88,7 @@ def main_merge_objects(
     context.view_layer.active_layer_collection = context.view_layer.layer_collection
 
     # Convert object to mesh and Apply modifiers
-    apply_objects(context)
+    apply_all_objects(context)
 
     # Merge objects
     for c in get_merge_parents(collection_names, scn.collection):
