@@ -54,9 +54,8 @@ def apply_all_objects(context: bpy_types.Context) -> None:
 
     for obj in scn.objects:
         if obj.visible_get():
-            # Convert object to mesh
             if obj.type in ("CURVE", "FONT", "SURFACE"):
-                # Select Object
+                # Convert object to mesh
                 context.view_layer.objects.active = obj
                 bpy.ops.object.select_all(action="DESELECT")
                 obj.select_set(state=True)
@@ -66,7 +65,7 @@ def apply_all_objects(context: bpy_types.Context) -> None:
                 main_apply_modifiers(obj)
 
 
-def get_merge_parents(
+def get_merge_collections(
     collection_names: set,
     parent_collection: bpy.types.Collection,
 ) -> Generator[bpy.types.Collection, None, None]:
@@ -75,7 +74,7 @@ def get_merge_parents(
         yield parent_collection
     else:
         for child in parent_collection.children:
-            yield from get_merge_parents(collection_names, child)
+            yield from get_merge_collections(collection_names, child)
 
 
 def main_merge_objects(
@@ -91,5 +90,5 @@ def main_merge_objects(
     apply_all_objects(context)
 
     # Merge objects
-    for c in get_merge_parents(collection_names, scn.collection):
+    for c in get_merge_collections(collection_names, scn.collection):
         merge_objects(context, c)
