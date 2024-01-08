@@ -6,6 +6,7 @@ import bpy_extras
 import bpy_types
 
 from .process import run_export_process
+from .utils import remove_all_invalid_items
 
 
 def list_actions_move(items: bpy.types.AnyType, index: int, action: str) -> tuple:
@@ -43,6 +44,19 @@ def list_actions_move(items: bpy.types.AnyType, index: int, action: str) -> tupl
             info = "Unknown action"
 
     return index, info
+
+
+class YFX_EXPORTER_OT_update_collection_list(bpy.types.Operator):
+    """Remove all invalid items"""
+
+    bl_idname = "yfx_exporter.update_collection_list"
+    bl_label = "Update Merge Collections"
+    bl_description = "Update merge collection list"
+    bl_options: ClassVar[set] = {"REGISTER", "UNDO"}
+
+    def execute(self, context: bpy_types.Context) -> set:
+        remove_all_invalid_items(self, context)
+        return {"FINISHED"}
 
 
 class YFX_EXPORTER_OT_list_actions(bpy.types.Operator):
@@ -223,6 +237,7 @@ class YFX_EXPORTER_OT_export_fbx(bpy.types.Operator):
         return context.mode == "OBJECT"
 
     def execute(self, context: bpy.types.Context) -> set:
+        remove_all_invalid_items(self, context)
         run_export_process(context)
 
         return {"FINISHED"}

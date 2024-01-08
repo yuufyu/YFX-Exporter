@@ -283,6 +283,11 @@ class YFX_EXPORTER_PT_collection_panel(View3dSidePanel, bpy.types.Panel):
 
         col = row.column(align=True)
         col.operator("yfx_exporter.list_action", icon="X", text="").action = "REMOVE"
+        col.operator(
+            "yfx_exporter.update_collection_list",
+            icon="FILE_REFRESH",
+            text="",
+        )
         col.separator()
         col.operator("yfx_exporter.list_action", icon="TRIA_UP", text="").action = "UP"
         col.operator(
