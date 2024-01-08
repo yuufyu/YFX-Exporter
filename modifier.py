@@ -69,6 +69,7 @@ def apply_modifiers_with_shapekeys(obj: bpy.types.Object) -> None:
         # Delete the blendshape donor
         remove_object(blendshape_obj)
 
+    # Keep Basis name
     obj.data.shape_keys.key_blocks[0].name = basis_name
 
     # Delete temp object

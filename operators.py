@@ -178,7 +178,7 @@ class YFX_EXPORTER_OT_add_collection(bpy.types.Operator):
         YFX_EXPORTER_OT_add_collection.collection_list_enum_items = [
             (
                 c.name,
-                c.name + " ",  # Append a space for non-translatable version
+                c.name + " ",  # Append a space to prevent translation
                 c.name,
                 "OUTLINER_COLLECTION",
                 idx,
