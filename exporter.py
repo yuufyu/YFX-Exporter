@@ -60,50 +60,63 @@ def get_merge_collections(
             yield from get_merge_collections(collection_settings, child)
 
 
-def separate_shapekey(obj: bpy.types.Object, eps: float = 0.0000001) -> None:
+def separate_shapekey(
+    shape_key: bpy.types.ShapeKey,
+    basis_shape_key: bpy.types.ShapeKey,
+    left_shape_key: bpy.types.ShapeKey,
+    right_shape_key: bpy.types.ShapeKey,
+    eps: float = 0.0000001,
+) -> None:
+    for i in range(len(shape_key.data)):
+        co = shape_key.data[i].co
+
+        if co.x > eps:
+            if left_shape_key:
+                left_shape_key.data[i].co = co
+        elif co.x < -eps:
+            if right_shape_key:
+                right_shape_key.data[i].co = co
+        else:
+            basis_co = basis_shape_key.data[i].co
+            center_co = basis_co + ((co - basis_co) / 2)
+            if left_shape_key:
+                left_shape_key.data[i].co = center_co
+
+            if right_shape_key:
+                right_shape_key.data[i].co = center_co
+
+
+def separate_shapekey_lr(obj: bpy.types.Object, eps: float = 0.0000001) -> None:
     shapekeys = obj.data.shape_keys
-    if shapekeys is not None and len(shapekeys.key_blocks) > 0:
-        key_blocks = shapekeys.key_blocks
-        remove_keys = []
-        basis_shapekey = key_blocks[0]
-        for shapekey in key_blocks:
-            name = shapekey.name
-            if name.endswith(("_LR", ".LR")):
-                left_key_name = name[:-3] + name[-3] + "L"
-                right_key_name = name[:-3] + name[-3] + "R"
+    if shapekeys is None or len(shapekeys.key_blocks) == 0:
+        return
 
-                left_key = None
-                right_key = None
+    remove_keys = []
 
-                if left_key_name not in key_blocks:
-                    left_key = obj.shape_key_add(name=left_key_name, from_mix=False)
+    key_blocks = shapekeys.key_blocks
+    basis_shape_key = key_blocks[0]
 
-                if right_key_name not in key_blocks:
-                    right_key = obj.shape_key_add(name=right_key_name, from_mix=True)
+    for shape_key in key_blocks:
+        name = shape_key.name
+        if name.endswith(("_LR", ".LR")):
+            left_key_name = name[:-3] + name[-3] + "L"
+            right_key_name = name[:-3] + name[-3] + "R"
+            left_key = (
+                obj.shape_key_add(name=left_key_name, from_mix=False)
+                if left_key_name not in key_blocks
+                else None
+            )
+            right_key = (
+                obj.shape_key_add(name=right_key_name, from_mix=True)
+                if right_key_name not in key_blocks
+                else None
+            )
+            if left_key or right_key:
+                separate_shapekey(shape_key, basis_shape_key, left_key, right_key)
+                remove_keys.append(shape_key)
 
-                for i in range(len(obj.data.vertices)):
-                    co = shapekey.data[i].co
-
-                    if co.x > eps:
-                        if left_key:
-                            left_key.data[i].co = co
-                    elif co.x < -eps:
-                        if right_key:
-                            right_key.data[i].co = co
-                    else:
-                        basis_co = basis_shapekey.data[i].co
-                        center_co = basis_co + ((co - basis_co) / 2)
-                        if left_key:
-                            left_key.data[i].co = center_co
-
-                        if right_key:
-                            right_key.data[i].co = center_co
-
-                if left_key or right_key:
-                    remove_keys.append(shapekey)
-
-        for remove_key in remove_keys:
-            obj.shape_key_remove(remove_key)
+    for remove_key in remove_keys:
+        obj.shape_key_remove(remove_key)
 
 
 def delete_unused_vertex_group(obj: bpy.types.Object) -> None:
@@ -179,7 +192,7 @@ class Exporter:
                 )
 
             if c.shapekey_settings.separate_shapekey:
-                separate_shapekey(obj)
+                separate_shapekey_lr(obj)
 
             if c.vertex_group_settings.delete_vertex_group:
                 delete_unused_vertex_group(obj)
