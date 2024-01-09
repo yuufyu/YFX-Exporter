@@ -1,7 +1,9 @@
+from typing import Generator
+
 import bpy
 import bpy_types
 
-from .merge import main_merge_objects
+from .merge import merge_objects
 from .modifier import main_apply_modifiers
 
 
@@ -37,6 +39,19 @@ def apply_all_objects(context: bpy_types.Context) -> None:
                 main_apply_modifiers(obj)
 
 
+def get_merge_collections(
+    collection_settings: dict,  # readonly
+    parent_collection: bpy.types.Collection,
+) -> Generator[bpy.types.AnyType, None, None]:
+    name = parent_collection.name
+    if name in collection_settings:
+        # Ignore nested collections
+        yield collection_settings[name]
+    else:
+        for child in parent_collection.children:
+            yield from get_merge_collections(collection_settings, child)
+
+
 class ExportError(Exception):
     pass
 
@@ -48,6 +63,7 @@ class Exporter:
         pass
 
     def export(self, context: bpy_types.Context, settings: bpy.types.AnyType) -> None:
+        scn = context.scene
         export_settings = settings.export_settings
 
         # Check file path error
@@ -59,8 +75,17 @@ class Exporter:
         apply_all_objects(context)
 
         # Merge objects
-        collection_names = {c.collection_ptr.name for c in export_settings.collections}
-        main_merge_objects(context, collection_names)
+        collection_settings_dict = {
+            c.collection_ptr.name: c for c in export_settings.collections
+        }
+
+        merge_collections = get_merge_collections(
+            collection_settings_dict,
+            scn.collection,
+        )
+
+        for c in merge_collections:
+            merge_objects(context, c.collection_ptr)
 
         # Export to fbx
         fbx_export_settings = export_settings.fbx_export_settings

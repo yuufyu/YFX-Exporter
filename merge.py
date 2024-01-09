@@ -1,5 +1,3 @@
-from typing import Generator
-
 import bpy
 import bpy_types
 
@@ -35,26 +33,3 @@ def merge_objects(context: bpy_types.Context, collection: bpy.types.Collection) 
             obj.select_set(state=True)
         bpy.ops.object.join()
         context.view_layer.objects.active.name = collection.name
-
-
-def get_merge_collections(
-    collection_names: set,
-    parent_collection: bpy.types.Collection,
-) -> Generator[bpy.types.Collection, None, None]:
-    if parent_collection.name in collection_names:
-        # Ignore nested collections
-        yield parent_collection
-    else:
-        for child in parent_collection.children:
-            yield from get_merge_collections(collection_names, child)
-
-
-def main_merge_objects(
-    context: bpy_types.Context,
-    collection_names: set,
-) -> None:
-    scn = context.scene
-
-    # Merge objects
-    for c in get_merge_collections(collection_names, scn.collection):
-        merge_objects(context, c)
