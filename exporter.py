@@ -2,6 +2,39 @@ import bpy
 import bpy_types
 
 from .merge import main_merge_objects
+from .modifier import main_apply_modifiers
+
+
+def make_all_unlink() -> None:
+    bpy.ops.object.duplicates_make_real(use_hierarchy=True)
+    bpy.ops.object.make_local(type="ALL")
+    bpy.ops.object.make_single_user(
+        type="ALL",
+        object=True,
+        obdata=True,
+        material=False,
+        animation=False,
+        obdata_animation=False,
+    )
+
+
+def apply_all_objects(context: bpy_types.Context) -> None:
+    scn = context.scene
+
+    bpy.ops.object.select_all(action="SELECT")
+    make_all_unlink()
+
+    for obj in scn.objects:
+        if obj.visible_get():
+            if obj.type in ("CURVE", "FONT", "SURFACE"):
+                # Convert object to mesh
+                context.view_layer.objects.active = obj
+                bpy.ops.object.select_all(action="DESELECT")
+                obj.select_set(state=True)
+                bpy.ops.object.convert(target="MESH")
+
+            if obj.type == "MESH":
+                main_apply_modifiers(obj)
 
 
 class ExportError(Exception):
@@ -21,6 +54,9 @@ class Exporter:
         if export_settings.export_path == "":
             error_msg = "Invalid path"
             raise ExportError(error_msg)
+
+        # Convert object to mesh and Apply modifiers
+        apply_all_objects(context)
 
         # Merge objects
         collection_names = {c.collection_ptr.name for c in export_settings.collections}
