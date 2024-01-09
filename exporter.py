@@ -87,6 +87,15 @@ class Exporter:
         for c in merge_collections:
             merge_objects(context, c.collection_ptr)
 
+            # Post merge process
+            if c.transform_settings.apply_all_transform:
+                bpy.ops.object.transform_apply(
+                    location=True,
+                    rotation=True,
+                    scale=True,
+                    properties=False,
+                )
+
         # Export to fbx
         fbx_export_settings = export_settings.fbx_export_settings
         keyargs_dict = {
