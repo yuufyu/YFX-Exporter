@@ -15,6 +15,13 @@ def delete_unused_vertex_group(obj: bpy.types.Object) -> None:
             if max_weights[group_index] < weight:
                 max_weights[group_index] = weight
 
+    # Deform vertex groups
+    deform_bone_names = []
+    armature = obj.find_armature()
+    if armature:
+        deform_bone_names = [bone.name for bone in armature.data.bones]
+
     for index, weight in reversed(list(enumerate(max_weights))):
-        if weight == 0:
+        vertex_group = obj.vertex_groups[index]
+        if vertex_group.name not in deform_bone_names or weight == 0:
             obj.vertex_groups.remove(obj.vertex_groups[index])
