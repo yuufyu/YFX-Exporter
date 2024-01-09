@@ -18,6 +18,7 @@ def merge_objects(context: bpy_types.Context, collection: bpy.types.Collection) 
 
     if len(merge_targets) == 1:
         merge_targets[0].name = collection.name
+        context.view_layer.objects.active = merge_targets[0]
     elif len(merge_targets) > 1:
         context.view_layer.objects.active = merge_targets[0]
         bpy.ops.object.select_all(action="DESELECT")

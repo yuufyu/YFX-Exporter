@@ -26,6 +26,25 @@ def apply_constraints(obj: bpy.types.Object) -> None:
         bpy.ops.constraint.apply(constraint=name)
 
 
+def delete_unused_vertex_group(obj: bpy.types.Object) -> None:
+    if len(obj.vertex_groups) == 0:
+        return
+
+    max_weights = [0] * len(obj.vertex_groups)
+
+    # Survey Zero Weights
+    for vertex in obj.data.vertices:
+        for vertex_group_element in vertex.groups:
+            group_index = vertex_group_element.group
+            weight = vertex_group_element.weight
+            if max_weights[group_index] < weight:
+                max_weights[group_index] = weight
+
+    for index, weight in reversed(list(enumerate(max_weights))):
+        if weight == 0:
+            obj.vertex_groups.remove(obj.vertex_groups[index])
+
+
 def apply_all_objects(context: bpy_types.Context) -> None:
     scn = context.scene
 
@@ -95,6 +114,8 @@ class Exporter:
         for c in merge_collections:
             merge_objects(context, c.collection_ptr)
 
+            obj = context.view_layer.objects.active
+
             # Post merge process
             if c.transform_settings.apply_all_transform:
                 bpy.ops.object.transform_apply(
@@ -103,6 +124,9 @@ class Exporter:
                     scale=True,
                     properties=False,
                 )
+
+            if c.vertex_group_settings.delete_vertex_group:
+                delete_unused_vertex_group(obj)
 
         # Export to fbx
         fbx_export_settings = export_settings.fbx_export_settings
