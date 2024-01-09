@@ -20,6 +20,12 @@ def make_all_unlink() -> None:
     )
 
 
+def apply_constraints(obj: bpy.types.Object) -> None:
+    names = [constraint.name for constraint in obj.constraints]
+    for name in names:
+        bpy.ops.constraint.apply(constraint=name)
+
+
 def apply_all_objects(context: bpy_types.Context) -> None:
     scn = context.scene
 
@@ -27,16 +33,18 @@ def apply_all_objects(context: bpy_types.Context) -> None:
     make_all_unlink()
 
     for obj in scn.objects:
-        if obj.visible_get():
+        if obj.visible_get() and obj.type in ("CURVE", "FONT", "SURFACE", "MESH"):
+            context.view_layer.objects.active = obj
+            bpy.ops.object.select_all(action="DESELECT")
+            obj.select_set(state=True)
+
+            apply_constraints(obj)
+
             if obj.type in ("CURVE", "FONT", "SURFACE"):
                 # Convert object to mesh
-                context.view_layer.objects.active = obj
-                bpy.ops.object.select_all(action="DESELECT")
-                obj.select_set(state=True)
                 bpy.ops.object.convert(target="MESH")
 
-            if obj.type == "MESH":
-                main_apply_modifiers(obj)
+            main_apply_modifiers(obj)
 
 
 def get_merge_collections(
