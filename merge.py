@@ -41,6 +41,12 @@ def merge_objects(context: bpy_types.Context, collection: bpy.types.Collection) 
 
         for obj in merge_targets:
             print(f"obj:{obj.name}")
+
+            # Normalize Basis name
+            shapekeys = obj.data.shape_keys
+            if shapekeys is not None and len(shapekeys.key_blocks) > 0:
+                shapekeys.key_blocks[0].name = "Basis"
+
             obj.select_set(state=True)
         bpy.ops.object.join()
         context.view_layer.objects.active.name = collection.name
@@ -64,11 +70,6 @@ def apply_all_objects(context: bpy_types.Context) -> None:
             if obj.type == "MESH":
                 main_apply_modifiers(obj)
 
-                # Normalize Basis name
-                shapekeys = obj.data.shape_keys
-                if shapekeys is not None and len(shapekeys.key_blocks) > 0:
-                    shapekeys.key_blocks[0].name = "Basis"
-
 
 def get_merge_collections(
     collection_names: set,
@@ -87,9 +88,6 @@ def main_merge_objects(
     collection_names: set,
 ) -> None:
     scn = context.scene
-
-    # Select collection for working
-    context.view_layer.active_layer_collection = context.view_layer.layer_collection
 
     # Convert object to mesh and Apply modifiers
     apply_all_objects(context)
