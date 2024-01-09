@@ -86,7 +86,7 @@ def separate_shapekey(
                 right_shape_key.data[i].co = center_co
 
 
-def separate_shapekey_lr(obj: bpy.types.Object, eps: float = 0.0000001) -> None:
+def separate_shapekey_lr(obj: bpy.types.Object) -> None:
     shapekeys = obj.data.shape_keys
     if shapekeys is None or len(shapekeys.key_blocks) == 0:
         return
