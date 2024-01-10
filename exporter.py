@@ -60,6 +60,24 @@ def get_merge_collections(
             yield from get_merge_collections(collection_settings, child)
 
 
+def insert_shapekey(obj: bpy.types.Object, name: str, index: int) -> bpy.types.ShapeKey:
+    key_blocks_len = len(obj.data.shape_keys.key_blocks)
+    if key_blocks_len <= 1:
+        msg = "insert_shapekey requires basis."
+        raise ExportError(msg)
+
+    shapekey = obj.shape_key_add(name=name, from_mix=False)
+
+    stash_active_index = obj.active_shape_key_index
+    obj.active_shape_key_index = key_blocks_len
+
+    for _ in range(key_blocks_len - index - 1):
+        bpy.ops.object.shape_key_move(type="UP")
+    obj.active_shape_key_index = stash_active_index
+
+    return shapekey
+
+
 def separate_shapekey(
     obj: bpy.types.Object,
     source: str,
@@ -68,9 +86,13 @@ def separate_shapekey(
     eps: float = 0.0000001,
 ) -> None:
     key_blocks = obj.data.shape_keys.key_blocks
-    source_shapekey = key_blocks.get(source)
-    left_shapekey = obj.shape_key_add(name=left, from_mix=False)
-    right_shapekey = obj.shape_key_add(name=right, from_mix=False)
+
+    source_shapekey_idx = key_blocks.find(source)
+    if source_shapekey_idx < 0:
+        return
+    source_shapekey = key_blocks[source_shapekey_idx]
+    right_shapekey = insert_shapekey(obj, right, source_shapekey_idx)
+    left_shapekey = insert_shapekey(obj, left, source_shapekey_idx)
     basis_shapekey = key_blocks[0]
 
     for i in range(len(source_shapekey.data)):
