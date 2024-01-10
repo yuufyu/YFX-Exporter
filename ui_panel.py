@@ -365,3 +365,91 @@ class YFX_EXPORTER_PT_collection_setting_panel(View3dSidePanel, bpy.types.Panel)
                         "check_vertices_with_no_weights",
                         text="Check Vertices with No Weights",
                     )
+
+
+class YFX_EXPORTER_UL_shapekey(bpy.types.UIList):
+    def draw_item(
+        self,
+        context: bpy_types.Context,
+        layout: bpy.types.UILayout,
+        data: bpy.types.AnyType,
+        item: bpy.types.AnyType,
+        icon: int,
+        active_data: bpy.types.AnyType,
+        active_propname: str,
+        index: int,
+    ) -> None:
+        if item.name:
+            row = layout.row()
+            row.prop(
+                item,
+                "name",
+                text="",
+                translate=False,
+                emboss=False,
+                icon="SHAPEKEY_DATA",
+            )
+
+    def invoke(self, context: bpy_types.Context, event: bpy.types.Event) -> None:
+        pass
+
+
+class YFX_EXPORTER_PT_shapekey_settings_panel(View3dSidePanel, bpy.types.Panel):
+    bl_label = "Shapekey Settings"
+    bl_idname = "YFX_EXPORTER_PT_shapekey_settings_panel"
+    bl_parent_id = "YFX_EXPORTER_PT_collection_setting_panel"
+
+    def draw(self, context: bpy_types.Context) -> None:
+        layout = self.layout
+        scn = context.scene
+        settings = scn.yfx_exporter_settings.export_settings
+        len_collections = len(settings.collections)
+
+        row = layout.row()
+        col = row.column(align=True)
+        row = col.row(align=True)
+        row.operator(
+            "yfx_exporter.update_shapekey_list",
+            icon="FILE_REFRESH",
+            text="Update Shapekeys",
+        )
+
+        if len_collections > 0 and 0 <= settings.collection_index < len_collections:
+            collection_shapekey_settings = settings.collections[
+                settings.collection_index
+            ].shapekey_settings
+
+            row = layout.row()
+            row.template_list(
+                "YFX_EXPORTER_UL_shapekey",
+                "",
+                collection_shapekey_settings,
+                "shapekeys",
+                collection_shapekey_settings,
+                "shapekey_index",
+                rows=5,
+            )
+
+            col = row.column(align=True)
+            col.operator(
+                "yfx_exporter.update_collection_list",
+                icon="FILE_REFRESH",
+                text="",
+            )
+            col.operator(
+                "yfx_exporter.list_action",
+                icon="X",
+                text="",
+            ).action = "REMOVE"
+
+            col.separator()
+            col.operator(
+                "yfx_exporter.list_action",
+                icon="TRIA_UP",
+                text="",
+            ).action = "UP"
+            col.operator(
+                "yfx_exporter.list_action",
+                icon="TRIA_DOWN",
+                text="",
+            ).action = "DOWN"

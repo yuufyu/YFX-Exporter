@@ -10,9 +10,18 @@ class YFX_EXPORTER_PG_warning_settings(bpy.types.PropertyGroup):
     check_vertices_with_no_weights: bpy.props.BoolProperty(default=True)
 
 
+class YFX_EXPORTER_PG_shapekey_settings(bpy.types.PropertyGroup):
+    name: bpy.props.StringProperty()
+
+
 class YFX_EXPORTER_PG_collection_shapekey_settings(bpy.types.PropertyGroup):
     separate_shapekey: bpy.props.BoolProperty(default=True)
     separate_mmd_shapekey: bpy.props.BoolProperty(default=True)
+    sort_shapekey: bpy.props.BoolProperty(default=False)
+    shapekeys: bpy.props.CollectionProperty(
+        type=YFX_EXPORTER_PG_shapekey_settings,
+    )
+    shapekey_index: bpy.props.IntProperty()
 
 
 class YFX_EXPORTER_PG_transform_settings(bpy.types.PropertyGroup):

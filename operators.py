@@ -6,6 +6,7 @@ import bpy_extras
 import bpy_types
 
 from .process import run_export_process
+from .shapekey import update_collection_shapekeys
 from .utils import remove_all_invalid_items
 
 
@@ -46,13 +47,15 @@ def list_actions_move(items: bpy.types.AnyType, index: int, action: str) -> tupl
     return index, info
 
 
+# Collection list Operators
+#################################################
 class YFX_EXPORTER_OT_update_collection_list(bpy.types.Operator):
     """Remove all invalid items"""
 
     bl_idname = "yfx_exporter.update_collection_list"
     bl_label = "Update Merge Collections"
     bl_description = "Update merge collection list"
-    bl_options: ClassVar[set] = {"REGISTER", "UNDO"}
+    bl_options: ClassVar[set] = {"REGISTER"}
 
     def execute(self, context: bpy_types.Context) -> set:
         remove_all_invalid_items(self, context)
@@ -141,27 +144,6 @@ class YFX_EXPORTER_OT_add_viewport_selection(bpy.types.Operator):
         return {"FINISHED"}
 
 
-class YFX_EXPORTER_OT_select_file(bpy.types.Operator, bpy_extras.io_utils.ExportHelper):
-    bl_idname = "yfx_exporter.select_file"
-    bl_label = "Select file in browser"
-
-    # ExportHelper mixin class uses this
-    filename_ext = ".fbx"
-
-    filter_glob: bpy.props.StringProperty(
-        default="*.fbx",
-        options={"HIDDEN"},
-    )
-
-    def execute(self, context: bpy_types.Context) -> set:
-        scn = context.scene
-        settings = scn.yfx_exporter_settings.export_settings
-
-        settings.export_path = self.filepath
-
-        return {"FINISHED"}
-
-
 class YFX_EXPORTER_OT_add_collection(bpy.types.Operator):
     bl_idname = "yfx_exporter.add_collection"
     bl_label = "Add Collection"
@@ -173,7 +155,9 @@ class YFX_EXPORTER_OT_add_collection(bpy.types.Operator):
         scn = context.scene
         export_settings = scn.yfx_exporter_settings.export_settings
         custom_collections = [
-            c.collection_ptr.name for c in export_settings.collections
+            c.collection_ptr.name
+            for c in export_settings.collections
+            if c.collection_ptr
         ]
 
         # There is a known bug with using a callback,
@@ -213,6 +197,44 @@ class YFX_EXPORTER_OT_add_collection(bpy.types.Operator):
             info = "%s added to list" % (item.collection_ptr.name)
 
         self.report({"INFO"}, info)
+
+        return {"FINISHED"}
+
+
+# Shapekeys list Operators
+#################################################
+class YFX_EXPORTER_OT_update_shapekey_list(bpy.types.Operator):
+    """Update Shapekey list"""
+
+    bl_idname = "yfx_exporter.update_shapekey_list"
+    bl_label = "Update Shapekey List"
+    bl_description = "Update shapekey list in collection"
+    bl_options: ClassVar[set] = {"REGISTER"}
+
+    def execute(self, context: bpy_types.Context) -> set:
+        update_collection_shapekeys(context)
+        return {"FINISHED"}
+
+
+# Export Operators
+#################################################
+class YFX_EXPORTER_OT_select_file(bpy.types.Operator, bpy_extras.io_utils.ExportHelper):
+    bl_idname = "yfx_exporter.select_file"
+    bl_label = "Select file in browser"
+
+    # ExportHelper mixin class uses this
+    filename_ext = ".fbx"
+
+    filter_glob: bpy.props.StringProperty(
+        default="*.fbx",
+        options={"HIDDEN"},
+    )
+
+    def execute(self, context: bpy_types.Context) -> set:
+        scn = context.scene
+        settings = scn.yfx_exporter_settings.export_settings
+
+        settings.export_path = self.filepath
 
         return {"FINISHED"}
 
