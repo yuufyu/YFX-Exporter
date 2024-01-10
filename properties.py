@@ -10,7 +10,7 @@ class YFX_EXPORTER_PG_warning_settings(bpy.types.PropertyGroup):
     check_vertices_with_no_weights: bpy.props.BoolProperty(default=True)
 
 
-class YFX_EXPORTER_PG_shapekey_settings(bpy.types.PropertyGroup):
+class YFX_EXPORTER_PG_collection_shapekey_settings(bpy.types.PropertyGroup):
     separate_shapekey: bpy.props.BoolProperty(default=True)
     separate_mmd_shapekey: bpy.props.BoolProperty(default=True)
 
@@ -32,7 +32,9 @@ class YFX_EXPORTER_PG_collection_settings(bpy.types.PropertyGroup):
     transform_settings: bpy.props.PointerProperty(
         type=YFX_EXPORTER_PG_transform_settings,
     )
-    shapekey_settings: bpy.props.PointerProperty(type=YFX_EXPORTER_PG_shapekey_settings)
+    shapekey_settings: bpy.props.PointerProperty(
+        type=YFX_EXPORTER_PG_collection_shapekey_settings,
+    )
     warning_settings: bpy.props.PointerProperty(type=YFX_EXPORTER_PG_warning_settings)
     vertex_group_settings: bpy.props.PointerProperty(
         type=YFX_EXPORTER_PG_vertex_group_settings,
