@@ -1,5 +1,6 @@
 import bpy
 import bpy_types
+from bl_ui.generic_ui_list import draw_ui_list
 
 
 def show_popup_message(
@@ -408,29 +409,14 @@ class YFX_EXPORTER_PT_shapekey_settings_panel(View3dSidePanel, bpy.types.Panel):
         )
 
         if len_collections > 0 and 0 <= settings.collection_index < len_collections:
-            collection_shapekey_settings = settings.collections[
-                settings.collection_index
-            ].shapekey_settings
-
-            row = layout.row()
-            row.template_list(
-                "YFX_EXPORTER_UL_shapekey",
-                "",
-                collection_shapekey_settings,
-                "shapekeys",
-                collection_shapekey_settings,
-                "shapekey_index",
-                rows=5,
+            shapekey_settings_path = f"scene.yfx_exporter_settings.export_settings\
+.collections[{settings.collection_index}].shapekey_settings"
+            draw_ui_list(
+                layout,
+                context,
+                class_name="YFX_EXPORTER_UL_shapekey",
+                list_path=shapekey_settings_path + ".shapekeys",
+                active_index_path=shapekey_settings_path + ".shapekey_index",
+                unique_id="yfx_exporter_collection_shapekey_ui_list",
+                insertion_operators=False,
             )
-
-            col = row.column(align=True)
-            col.operator(
-                "yfx_exporter.list_action",
-                icon="TRIA_UP",
-                text="",
-            ).action = "UP"
-            col.operator(
-                "yfx_exporter.list_action",
-                icon="TRIA_DOWN",
-                text="",
-            ).action = "DOWN"
