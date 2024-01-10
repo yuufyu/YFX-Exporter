@@ -61,29 +61,35 @@ def get_merge_collections(
 
 
 def separate_shapekey(
-    shape_key: bpy.types.ShapeKey,
-    basis_shape_key: bpy.types.ShapeKey,
-    left_shape_key: bpy.types.ShapeKey,
-    right_shape_key: bpy.types.ShapeKey,
+    obj: bpy.types.Object,
+    source: str,
+    left: str,
+    right: str,
     eps: float = 0.0000001,
 ) -> None:
-    for i in range(len(shape_key.data)):
-        co = shape_key.data[i].co
+    key_blocks = obj.data.shape_keys.key_blocks
+    source_shapekey = key_blocks.get(source)
+    left_shapekey = obj.shape_key_add(name=left, from_mix=False)
+    right_shapekey = obj.shape_key_add(name=right, from_mix=False)
+    basis_shapekey = key_blocks[0]
+
+    for i in range(len(source_shapekey.data)):
+        co = source_shapekey.data[i].co
 
         if co.x > eps:
-            if left_shape_key:
-                left_shape_key.data[i].co = co
+            if left_shapekey:
+                left_shapekey.data[i].co = co
         elif co.x < -eps:
-            if right_shape_key:
-                right_shape_key.data[i].co = co
+            if right_shapekey:
+                right_shapekey.data[i].co = co
         else:
-            basis_co = basis_shape_key.data[i].co
+            basis_co = basis_shapekey.data[i].co
             center_co = basis_co + ((co - basis_co) / 2)
-            if left_shape_key:
-                left_shape_key.data[i].co = center_co
+            if left_shapekey:
+                left_shapekey.data[i].co = center_co
 
-            if right_shape_key:
-                right_shape_key.data[i].co = center_co
+            if right_shapekey:
+                right_shapekey.data[i].co = center_co
 
 
 def separate_shapekey_lr(obj: bpy.types.Object) -> None:
@@ -94,26 +100,16 @@ def separate_shapekey_lr(obj: bpy.types.Object) -> None:
     remove_keys = []
 
     key_blocks = shapekeys.key_blocks
-    basis_shape_key = key_blocks[0]
 
     for shape_key in key_blocks:
         name = shape_key.name
         if name.endswith(("_LR", ".LR")):
             left_key_name = name[:-3] + name[-3] + "L"
             right_key_name = name[:-3] + name[-3] + "R"
-            left_key = (
-                obj.shape_key_add(name=left_key_name, from_mix=False)
-                if left_key_name not in key_blocks
-                else None
-            )
-            right_key = (
-                obj.shape_key_add(name=right_key_name, from_mix=True)
-                if right_key_name not in key_blocks
-                else None
-            )
-            if left_key or right_key:
-                separate_shapekey(shape_key, basis_shape_key, left_key, right_key)
-                remove_keys.append(shape_key)
+
+            separate_shapekey(obj, name, left_key_name, right_key_name)
+
+            remove_keys.append(shape_key)
 
     for remove_key in remove_keys:
         obj.shape_key_remove(remove_key)
