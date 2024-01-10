@@ -6,7 +6,6 @@ from .merge import get_child_objects
 def insert_shapekey(obj: bpy.types.Object, name: str, index: int) -> bpy.types.ShapeKey:
     key_blocks_len = len(obj.data.shape_keys.key_blocks)
     if key_blocks_len <= 1:
-        msg = "insert_shapekey requires basis."
         return None
 
     shapekey = obj.shape_key_add(name=name, from_mix=False)
