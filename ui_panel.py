@@ -420,3 +420,14 @@ class YFX_EXPORTER_PT_shapekey_settings_panel(View3dSidePanel, bpy.types.Panel):
                 unique_id="yfx_exporter_collection_shapekey_ui_list",
                 insertion_operators=False,
             )
+
+            collection_setting = settings.collections[settings.collection_index]
+            shapekey_settings = collection_setting.shapekey_settings
+
+            row = layout.row(align=True)
+            col = row.column(align=True)
+            col.prop(
+                shapekey_settings,
+                "sort_shapekey",
+                text="Sort Shapekeys",
+            )

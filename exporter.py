@@ -5,7 +5,7 @@ import bpy_types
 
 from .merge import merge_objects
 from .modifier import main_apply_modifiers
-from .shapekey import separate_shapekey_lr
+from .shapekey import separate_shapekey_lr, sort_shapekey
 
 
 def make_all_unlink() -> None:
@@ -100,6 +100,7 @@ class Exporter:
     def export(self, context: bpy_types.Context, settings: bpy.types.AnyType) -> None:
         scn = context.scene
         export_settings = settings.export_settings
+        collection_settings = export_settings.collections
 
         # Check file path error
         if export_settings.export_path == "":
@@ -111,7 +112,7 @@ class Exporter:
 
         # Merge objects
         collection_settings_dict = {
-            c.collection_ptr.name: c for c in export_settings.collections
+            c.collection_ptr.name: c for c in collection_settings
         }
 
         merge_collections = get_merge_collections(
@@ -132,6 +133,9 @@ class Exporter:
                     scale=True,
                     properties=False,
                 )
+
+            if c.shapekey_settings.sort_shapekey:
+                sort_shapekey(obj, c.shapekey_settings)
 
             if c.shapekey_settings.separate_shapekey:
                 separate_shapekey_lr(obj)

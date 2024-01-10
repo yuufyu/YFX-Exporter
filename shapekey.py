@@ -79,6 +79,23 @@ def separate_shapekey_lr(obj: bpy.types.Object) -> None:
         obj.shape_key_remove(remove_key)
 
 
+def sort_shapekey(obj: bpy.types.Object, shapekey_settings: bpy.types.AnyType) -> None:
+    shapekeys = obj.data.shape_keys
+    if shapekeys is None or len(shapekeys.key_blocks) <= 1:
+        return
+
+    stash_active_index = obj.active_shape_key_index
+    key_blocks = shapekeys.key_blocks
+    for shapekey_setting in shapekey_settings.shapekeys:
+        idx = key_blocks.find(shapekey_setting.name)
+        if idx < 0:
+            continue
+        obj.active_shape_key_index = idx
+        bpy.ops.object.shape_key_move(type="BOTTOM")
+
+    obj.active_shape_key_index = stash_active_index
+
+
 def get_collection_shapekeys(collection: bpy.types.Collection) -> list:
     objects = get_child_objects(collection)
     total_shapekeys = []
