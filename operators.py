@@ -162,16 +162,6 @@ class YFX_EXPORTER_OT_select_file(bpy.types.Operator, bpy_extras.io_utils.Export
         return {"FINISHED"}
 
 
-def get_collection_by_name(
-    name: str,
-    context: bpy_types.Context,
-) -> bpy.types.Collection:
-    for collection in bpy.data.collections:
-        if collection.name == name:
-            return collection
-    return None
-
-
 class YFX_EXPORTER_OT_add_collection(bpy.types.Operator):
     bl_idname = "yfx_exporter.add_collection"
     bl_label = "Add Collection"
@@ -207,7 +197,7 @@ class YFX_EXPORTER_OT_add_collection(bpy.types.Operator):
     def execute(self, context: bpy_types.Context) -> set:
         scn = context.scene
         settings = scn.yfx_exporter_settings.export_settings
-        act_coll = get_collection_by_name(self.user_collections, context)
+        act_coll = bpy.data.collections.get(self.user_collections)
 
         if act_coll is None:
             message = "Selected Collection is Not founded"
