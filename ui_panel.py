@@ -381,14 +381,7 @@ class YFX_EXPORTER_UL_shapekey(bpy.types.UIList):
     ) -> None:
         if item.name:
             row = layout.row()
-            row.prop(
-                item,
-                "name",
-                text="",
-                translate=False,
-                emboss=False,
-                icon="SHAPEKEY_DATA",
-            )
+            row.label(text=item.name, translate=False, icon="SHAPEKEY_DATA")
 
     def invoke(self, context: bpy_types.Context, event: bpy.types.Event) -> None:
         pass
@@ -431,18 +424,6 @@ class YFX_EXPORTER_PT_shapekey_settings_panel(View3dSidePanel, bpy.types.Panel):
             )
 
             col = row.column(align=True)
-            col.operator(
-                "yfx_exporter.update_collection_list",
-                icon="FILE_REFRESH",
-                text="",
-            )
-            col.operator(
-                "yfx_exporter.list_action",
-                icon="X",
-                text="",
-            ).action = "REMOVE"
-
-            col.separator()
             col.operator(
                 "yfx_exporter.list_action",
                 icon="TRIA_UP",

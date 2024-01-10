@@ -25,9 +25,20 @@ def update_collection_shapekeys(context: bpy.types.Context) -> None:
         if len_collections > 0 and 0 <= collection_index < len_collections:
             collection_setting = collection_settings[collection_index]
             shapekey_settings = collection_setting.shapekey_settings
-            shapekey_names = get_collection_shapekeys(collection_setting.collection_ptr)
             shapekeys = shapekey_settings.shapekeys
+
+            # Add new shapekeys
+            shapekey_names = get_collection_shapekeys(collection_setting.collection_ptr)
             for name in shapekey_names:
                 if shapekeys.find(name) < 0:
                     shapekey_item = shapekeys.add()
                     shapekey_item.name = name
+
+            # Remove deleted shapekeys
+            remove_idx = [
+                i
+                for i, shapekey in enumerate(shapekeys)
+                if shapekey.name not in shapekey_names
+            ]
+            for i in reversed(remove_idx):
+                shapekeys.remove(i)
