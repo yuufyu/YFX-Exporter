@@ -3,6 +3,83 @@ import bpy
 from .merge import get_child_objects
 
 
+def insert_shapekey(obj: bpy.types.Object, name: str, index: int) -> bpy.types.ShapeKey:
+    key_blocks_len = len(obj.data.shape_keys.key_blocks)
+    if key_blocks_len <= 1:
+        msg = "insert_shapekey requires basis."
+        return None
+
+    shapekey = obj.shape_key_add(name=name, from_mix=False)
+
+    stash_active_index = obj.active_shape_key_index
+    obj.active_shape_key_index = key_blocks_len
+
+    for _ in range(key_blocks_len - index - 1):
+        bpy.ops.object.shape_key_move(type="UP")
+    obj.active_shape_key_index = stash_active_index
+
+    return shapekey
+
+
+def separate_shapekey(
+    obj: bpy.types.Object,
+    source: str,
+    left: str,
+    right: str,
+    eps: float = 0.0000001,
+) -> None:
+    key_blocks = obj.data.shape_keys.key_blocks
+
+    source_shapekey_idx = key_blocks.find(source)
+    if source_shapekey_idx < 0:
+        return
+    source_shapekey = key_blocks[source_shapekey_idx]
+    right_shapekey = insert_shapekey(obj, right, source_shapekey_idx)  # No error check
+    left_shapekey = insert_shapekey(obj, left, source_shapekey_idx)  # No error check
+    basis_shapekey = key_blocks[0]
+
+    for i in range(len(source_shapekey.data)):
+        co = source_shapekey.data[i].co
+
+        if co.x > eps:
+            if left_shapekey:
+                left_shapekey.data[i].co = co
+        elif co.x < -eps:
+            if right_shapekey:
+                right_shapekey.data[i].co = co
+        else:
+            basis_co = basis_shapekey.data[i].co
+            center_co = basis_co + ((co - basis_co) / 2)
+            if left_shapekey:
+                left_shapekey.data[i].co = center_co
+
+            if right_shapekey:
+                right_shapekey.data[i].co = center_co
+
+
+def separate_shapekey_lr(obj: bpy.types.Object) -> None:
+    shapekeys = obj.data.shape_keys
+    if shapekeys is None or len(shapekeys.key_blocks) == 0:
+        return
+
+    remove_keys = []
+
+    key_blocks = shapekeys.key_blocks
+
+    for shape_key in key_blocks:
+        name = shape_key.name
+        if name.endswith(("_LR", ".LR")):
+            left_key_name = name[:-3] + name[-3] + "L"
+            right_key_name = name[:-3] + name[-3] + "R"
+
+            separate_shapekey(obj, name, left_key_name, right_key_name)
+
+            remove_keys.append(shape_key)
+
+    for remove_key in remove_keys:
+        obj.shape_key_remove(remove_key)
+
+
 def get_collection_shapekeys(collection: bpy.types.Collection) -> list:
     objects = get_child_objects(collection)
     total_shapekeys = []
