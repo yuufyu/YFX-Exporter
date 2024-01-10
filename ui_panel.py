@@ -1,6 +1,5 @@
 import bpy
 import bpy_types
-from bl_ui.generic_ui_list import draw_ui_list
 
 
 def show_popup_message(
@@ -274,7 +273,7 @@ class YFX_EXPORTER_PT_collection_panel(View3dSidePanel, bpy.types.Panel):
         row = layout.row()
         row.template_list(
             "YFX_EXPORTER_UL_colllection",
-            "",
+            "yfx_exporter_collection_list_panel",
             settings,
             "collections",
             settings,
@@ -399,7 +398,7 @@ class YFX_EXPORTER_PT_shapekey_settings_panel(View3dSidePanel, bpy.types.Panel):
         settings = scn.yfx_exporter_settings.export_settings
         len_collections = len(settings.collections)
 
-        row = layout.row()
+        row = layout.row(align=True)
         col = row.column(align=True)
         row = col.row(align=True)
         row.operator(
@@ -411,18 +410,42 @@ class YFX_EXPORTER_PT_shapekey_settings_panel(View3dSidePanel, bpy.types.Panel):
         if len_collections > 0 and 0 <= settings.collection_index < len_collections:
             shapekey_settings_path = f"scene.yfx_exporter_settings.export_settings\
 .collections[{settings.collection_index}].shapekey_settings"
-            draw_ui_list(
-                layout,
-                context,
-                class_name="YFX_EXPORTER_UL_shapekey",
-                list_path=shapekey_settings_path + ".shapekeys",
-                active_index_path=shapekey_settings_path + ".shapekey_index",
-                unique_id="yfx_exporter_collection_shapekey_ui_list",
-                insertion_operators=False,
-            )
+            list_path = shapekey_settings_path + ".shapekeys"
+            active_index_path = shapekey_settings_path + ".shapekey_index"
 
             collection_setting = settings.collections[settings.collection_index]
             shapekey_settings = collection_setting.shapekey_settings
+
+            row = layout.row()
+            row.template_list(
+                "YFX_EXPORTER_UL_shapekey",
+                "yfx_exporter_shapekey_list_panel",
+                shapekey_settings,
+                "shapekeys",
+                shapekey_settings,
+                "shapekey_index",
+                rows=5,
+            )
+
+            col = row.column(align=True)
+
+            props = col.operator(
+                "uilist.entry_move",
+                icon="TRIA_UP",
+                text="",
+            )
+            props.direction = "UP"
+            props.list_path = list_path
+            props.active_index_path = active_index_path
+
+            props = col.operator(
+                "uilist.entry_move",
+                icon="TRIA_DOWN",
+                text="",
+            )
+            props.direction = "DOWN"
+            props.list_path = list_path
+            props.active_index_path = active_index_path
 
             row = layout.row(align=True)
             col = row.column(align=True)
