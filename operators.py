@@ -6,7 +6,7 @@ import bpy_extras
 import bpy_types
 
 from .process import run_export_process
-from .shapekey import update_collection_shapekeys
+from .shapekey import update_active_collection_shapekeys
 from .utils import update_setting_items
 
 
@@ -212,7 +212,7 @@ class YFX_EXPORTER_OT_update_shapekey_list(bpy.types.Operator):
     bl_options: ClassVar[set] = {"REGISTER"}
 
     def execute(self, context: bpy_types.Context) -> set:
-        update_collection_shapekeys(context)
+        update_active_collection_shapekeys(context)
         return {"FINISHED"}
 
 
