@@ -1,6 +1,7 @@
 import bpy
 from bpy_extras.io_utils import orientation_helper, path_reference_mode
 
+from .process import run_export_process
 from .utils import update_active_setting_items
 
 
@@ -374,6 +375,9 @@ class YFX_EXPORTER_PG_export_settings(bpy.types.PropertyGroup):
 class YFX_EXPORTER_PG_settings(bpy.types.PropertyGroup):
     export_settings: bpy.props.PointerProperty(type=YFX_EXPORTER_PG_export_settings)
     is_subprocess: bpy.props.BoolProperty()
+
+    def export(self, context: bpy.types.Context) -> None:
+        run_export_process(context)
 
 
 def register() -> None:

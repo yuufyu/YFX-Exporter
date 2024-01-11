@@ -5,7 +5,8 @@ import bpy
 import bpy_extras
 import bpy_types
 
-from .process import run_export_process
+from .exporter import ExportError
+from .process import start_background_export
 from .shapekey import update_active_collection_shapekeys
 from .utils import update_active_setting_items, update_all_setting_items
 
@@ -250,6 +251,9 @@ class YFX_EXPORTER_OT_export_fbx(bpy.types.Operator):
 
     def execute(self, context: bpy.types.Context) -> set:
         update_all_setting_items(context)
-        run_export_process(context)
+        try:
+            start_background_export(context)
+        except ExportError as e:
+            self.report({"ERROR"}, str(e))
 
         return {"FINISHED"}
