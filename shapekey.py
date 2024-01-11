@@ -37,7 +37,7 @@ def separate_shapekey(
         insert_shapekey(obj, right, source_shapekey_idx) if right else None
     )  # No error check
     left_shapekey = (
-        insert_shapekey(obj, left, source_shapekey_idx) if right else None
+        insert_shapekey(obj, left, source_shapekey_idx) if left else None
     )  # No error check
     basis_shapekey = key_blocks[0]
 
@@ -72,18 +72,14 @@ def separate_shapekey_lr(
     for shapekey_setting in shapekey_settings.shapekeys:
         if shapekey_setting.separate_shapekey:
             idx = key_blocks.find(shapekey_setting.name)
-            if idx < 0:
-                continue
-
             left = shapekey_setting.separate_shapekey_left
             right = shapekey_setting.separate_shapekey_right
-            if not (left or right):
-                continue
+            if idx > 0:
+                if left or right:
+                    separate_shapekey(obj, shapekey_setting.name, left, right)
 
-            separate_shapekey(obj, shapekey_setting.name, left, right)
-
-            if shapekey_setting.delete_shapekey:
-                obj.shape_key_remove(key_blocks[idx])
+                if shapekey_setting.delete_shapekey:
+                    obj.shape_key_remove(key_blocks[idx])
 
 
 def sort_shapekey(obj: bpy.types.Object, shapekey_settings: bpy.types.AnyType) -> None:
