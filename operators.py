@@ -249,7 +249,7 @@ class YFX_EXPORTER_OT_export_fbx(bpy.types.Operator):
         return context.mode == "OBJECT"
 
     def execute(self, context: bpy.types.Context) -> set:
-        update_all_setting_items(self, context)
+        update_all_setting_items(context)
         run_export_process(context)
 
         return {"FINISHED"}
