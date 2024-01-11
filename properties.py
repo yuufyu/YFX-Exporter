@@ -12,12 +12,13 @@ class YFX_EXPORTER_PG_warning_settings(bpy.types.PropertyGroup):
 
 class YFX_EXPORTER_PG_shapekey_settings(bpy.types.PropertyGroup):
     name: bpy.props.StringProperty()
+    separate_shapekey: bpy.props.BoolProperty(default=False)
+    separate_shapekey_left: bpy.props.StringProperty()
+    separate_shapekey_right: bpy.props.StringProperty()
+    delete_shapekey: bpy.props.BoolProperty(default=False)
 
 
 class YFX_EXPORTER_PG_collection_shapekey_settings(bpy.types.PropertyGroup):
-    separate_shapekey: bpy.props.BoolProperty(default=True)
-    separate_mmd_shapekey: bpy.props.BoolProperty(default=True)
-    sort_shapekey: bpy.props.BoolProperty(default=False)
     shapekeys: bpy.props.CollectionProperty(
         type=YFX_EXPORTER_PG_shapekey_settings,
     )

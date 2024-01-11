@@ -1,5 +1,7 @@
 import bpy
 
+from .shapekey import update_collection_shapekeys
+
 exclusive_update_setting_items = False
 
 
@@ -25,8 +27,12 @@ def update_setting_items(
     self: bpy.types.AnyType,
     context: bpy.types.Context,
 ) -> None:
-    global exclusive_update_setting_items  # noqa: PLW0603
-    if exclusive_update_setting_items is False:
-        exclusive_update_setting_items = True
-        remove_invalid_collection_settings(context)
-        exclusive_update_setting_items = False
+    if context and context.scene.yfx_exporter_settings:
+        global exclusive_update_setting_items  # noqa: PLW0603
+        if exclusive_update_setting_items is False:
+            exclusive_update_setting_items = True
+
+            remove_invalid_collection_settings(context)
+            update_collection_shapekeys(context)
+
+            exclusive_update_setting_items = False

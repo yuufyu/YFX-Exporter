@@ -336,19 +336,6 @@ class YFX_EXPORTER_PT_collection_setting_panel(View3dSidePanel, bpy.types.Panel)
                 col.separator()
 
                 col.prop(
-                    item.shapekey_settings,
-                    "separate_shapekey",
-                    text="Separate Shapekeys L/R",
-                )
-                col.prop(
-                    item.shapekey_settings,
-                    "separate_mmd_shapekey",
-                    text="Separate MMD Shapekeys",
-                )
-
-                col.separator()
-
-                col.prop(
                     item.warning_settings,
                     "check_warnings",
                     text="Check for Warnings",
@@ -447,10 +434,38 @@ class YFX_EXPORTER_PT_shapekey_settings_panel(View3dSidePanel, bpy.types.Panel):
             props.list_path = list_path
             props.active_index_path = active_index_path
 
-            row = layout.row(align=True)
-            col = row.column(align=True)
-            col.prop(
-                shapekey_settings,
-                "sort_shapekey",
-                text="Sort Shapekeys",
-            )
+            len_shapekeys = len(shapekey_settings.shapekeys)
+            if (
+                len_shapekeys > 0
+                and 0 <= shapekey_settings.shapekey_index < len_shapekeys
+            ):
+                shapekey_setting = shapekey_settings.shapekeys[
+                    shapekey_settings.shapekey_index
+                ]
+
+                row = layout.row(align=True)
+                col = row.column(align=True)
+
+                col.prop(
+                    shapekey_setting,
+                    "separate_shapekey",
+                    text="Separate Shapekeys L/R",
+                )
+                if shapekey_setting.separate_shapekey:
+                    col.use_property_split = True
+                    col.use_property_decorate = False  # No animation.
+                    col.prop(
+                        shapekey_setting,
+                        "separate_shapekey_left",
+                        text="Left",
+                    )
+                    col.prop(
+                        shapekey_setting,
+                        "separate_shapekey_right",
+                        text="Right",
+                    )
+                    col.prop(
+                        shapekey_setting,
+                        "delete_shapekey",
+                        text="Delete Source Shapekey",
+                    )

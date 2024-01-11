@@ -33,8 +33,12 @@ def separate_shapekey(
     if source_shapekey_idx < 0:
         return
     source_shapekey = key_blocks[source_shapekey_idx]
-    right_shapekey = insert_shapekey(obj, right, source_shapekey_idx)  # No error check
-    left_shapekey = insert_shapekey(obj, left, source_shapekey_idx)  # No error check
+    right_shapekey = (
+        insert_shapekey(obj, right, source_shapekey_idx) if right else None
+    )  # No error check
+    left_shapekey = (
+        insert_shapekey(obj, left, source_shapekey_idx) if right else None
+    )  # No error check
     basis_shapekey = key_blocks[0]
 
     for i in range(len(source_shapekey.data)):
@@ -56,27 +60,30 @@ def separate_shapekey(
                 right_shapekey.data[i].co = center_co
 
 
-def separate_shapekey_lr(obj: bpy.types.Object) -> None:
+def separate_shapekey_lr(
+    obj: bpy.types.Object,
+    shapekey_settings: bpy.types.AnyType,
+) -> None:
     shapekeys = obj.data.shape_keys
-    if shapekeys is None or len(shapekeys.key_blocks) == 0:
+    if shapekeys is None or len(shapekeys.key_blocks) <= 1:
         return
 
-    remove_keys = []
-
     key_blocks = shapekeys.key_blocks
+    for shapekey_setting in shapekey_settings.shapekeys:
+        if shapekey_setting.separate_shapekey:
+            idx = key_blocks.find(shapekey_setting.name)
+            if idx < 0:
+                continue
 
-    for shape_key in key_blocks:
-        name = shape_key.name
-        if name.endswith(("_LR", ".LR")):
-            left_key_name = name[:-3] + name[-3] + "L"
-            right_key_name = name[:-3] + name[-3] + "R"
+            left = shapekey_setting.separate_shapekey_left
+            right = shapekey_setting.separate_shapekey_right
+            if not (left or right):
+                continue
 
-            separate_shapekey(obj, name, left_key_name, right_key_name)
+            separate_shapekey(obj, shapekey_setting.name, left, right)
 
-            remove_keys.append(shape_key)
-
-    for remove_key in remove_keys:
-        obj.shape_key_remove(remove_key)
+            if shapekey_setting.delete_shapekey:
+                obj.shape_key_remove(key_blocks[idx])
 
 
 def sort_shapekey(obj: bpy.types.Object, shapekey_settings: bpy.types.AnyType) -> None:

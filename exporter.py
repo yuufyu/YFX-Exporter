@@ -134,11 +134,9 @@ class Exporter:
                     properties=False,
                 )
 
-            if c.shapekey_settings.sort_shapekey:
-                sort_shapekey(obj, c.shapekey_settings)
+            sort_shapekey(obj, c.shapekey_settings)
 
-            if c.shapekey_settings.separate_shapekey:
-                separate_shapekey_lr(obj)
+            separate_shapekey_lr(obj, c.shapekey_settings)
 
             if c.vertex_group_settings.delete_vertex_group:
                 delete_unused_vertex_group(obj)
