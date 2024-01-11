@@ -7,7 +7,7 @@ import bpy_types
 
 from .process import run_export_process
 from .shapekey import update_active_collection_shapekeys
-from .utils import update_setting_items
+from .utils import update_active_setting_items
 
 
 def list_actions_move(items: bpy.types.AnyType, index: int, action: str) -> tuple:
@@ -58,7 +58,7 @@ class YFX_EXPORTER_OT_update_collection_list(bpy.types.Operator):
     bl_options: ClassVar[set] = {"REGISTER"}
 
     def execute(self, context: bpy_types.Context) -> set:
-        update_setting_items(self, context)
+        update_active_setting_items(self, context)
         return {"FINISHED"}
 
 
@@ -249,7 +249,7 @@ class YFX_EXPORTER_OT_export_fbx(bpy.types.Operator):
         return context.mode == "OBJECT"
 
     def execute(self, context: bpy.types.Context) -> set:
-        update_setting_items(self, context)
+        update_active_setting_items(self, context)
         run_export_process(context)
 
         return {"FINISHED"}

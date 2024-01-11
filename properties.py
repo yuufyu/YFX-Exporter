@@ -1,7 +1,7 @@
 import bpy
 from bpy_extras.io_utils import orientation_helper, path_reference_mode
 
-from .utils import update_setting_items
+from .utils import update_active_setting_items
 
 
 class YFX_EXPORTER_PG_warning_settings(bpy.types.PropertyGroup):
@@ -363,7 +363,7 @@ class YFX_EXPORTER_PG_fbx_export_settings(bpy.types.PropertyGroup):
 
 class YFX_EXPORTER_PG_export_settings(bpy.types.PropertyGroup):
     collections: bpy.props.CollectionProperty(type=YFX_EXPORTER_PG_collection_settings)
-    collection_index: bpy.props.IntProperty(update=update_setting_items)
+    collection_index: bpy.props.IntProperty(update=update_active_setting_items)
     fbx_export_settings: bpy.props.PointerProperty(
         type=YFX_EXPORTER_PG_fbx_export_settings,
     )

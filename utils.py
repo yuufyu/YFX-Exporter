@@ -23,7 +23,7 @@ def remove_invalid_collection_settings(context: bpy.types.Context) -> None:
         )
 
 
-def update_setting_items(
+def update_active_setting_items(
     self: bpy.types.AnyType,
     context: bpy.types.Context,
 ) -> None:
