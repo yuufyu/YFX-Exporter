@@ -255,5 +255,7 @@ class YFX_EXPORTER_OT_export_fbx(bpy.types.Operator):
             start_background_export(context)
         except ExportError as e:
             self.report({"ERROR"}, str(e))
+        else:
+            self.report({"INFO"}, "FBX exported successfully!")
 
         return {"FINISHED"}

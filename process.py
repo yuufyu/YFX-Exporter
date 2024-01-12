@@ -7,7 +7,7 @@ from pathlib import Path
 
 import bpy
 
-from .exporter import Exporter
+from yfx_exporter.exporter import Exporter, ExportError
 
 
 class Process(metaclass=abc.ABCMeta):
@@ -63,12 +63,15 @@ def start_background_export(context: bpy.types.Context) -> None:
         with subprocess.Popen(
             blender_args,
             stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
             encoding="UTF-8",
             cwd=str(exec_script_dir),
         ) as proc:
             print(proc.stdout.read())
 
-        print("-- export end --- ")
+            msg_stderr = proc.stderr.read()
+            if msg_stderr:
+                raise ExportError(msg_stderr)
 
 
 if __name__ == "__main__":
@@ -77,12 +80,9 @@ if __name__ == "__main__":
 
     args = parser.parse_args(sys.argv[sys.argv.index("--") + 1 :])
     output = args.output
-    print(f"output path {output}")
 
-    if bpy.app.background:
-        context = bpy.context
-        settings = context.scene.yfx_exporter_settings
-        export_settings = settings.export_settings
-        export_settings.export_path = output
-
-        run_export_process(context)
+    context = bpy.context
+    settings = context.scene.yfx_exporter_settings
+    export_settings = settings.export_settings
+    export_settings.export_path = output
+    run_export_process(context)
