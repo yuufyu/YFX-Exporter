@@ -1,4 +1,3 @@
-import abc
 import argparse
 import subprocess
 import sys
@@ -10,20 +9,6 @@ import bpy
 from yfx_exporter.exporter import Exporter, ExportError
 
 
-class Process(metaclass=abc.ABCMeta):
-    @abc.abstractmethod
-    def report_info(self, message: str) -> None:
-        raise NotImplementedError
-
-
-class MainProcess(Process):
-    pass
-
-
-class SubProcess(Process):
-    pass
-
-
 def run_export_process(context: bpy.types.Context) -> None:
     scn = context.scene
     settings = scn.yfx_exporter_settings
@@ -33,7 +18,7 @@ def run_export_process(context: bpy.types.Context) -> None:
 
 
 def start_foreground_export(context: bpy.types.Context) -> None:
-    pass
+    run_export_process(context)
 
 
 def start_background_export(context: bpy.types.Context) -> None:
