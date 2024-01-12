@@ -7,6 +7,8 @@ from pathlib import Path
 
 import bpy
 
+from .exporter import Exporter
+
 
 class Process(metaclass=abc.ABCMeta):
     @abc.abstractmethod
@@ -23,8 +25,6 @@ class SubProcess(Process):
 
 
 def run_export_process(context: bpy.types.Context) -> None:
-    from .exporter import Exporter
-
     scn = context.scene
     settings = scn.yfx_exporter_settings
 
@@ -45,6 +45,7 @@ def start_background_export(context: bpy.types.Context) -> None:
         bpy.ops.wm.save_as_mainfile(filepath=temp_file, copy=True, check_existing=False)
 
         exec_script_path = __file__
+        exec_script_dir = Path(exec_script_path).parent
 
         blender_args = [
             bpy.app.binary_path,
@@ -59,15 +60,15 @@ def start_background_export(context: bpy.types.Context) -> None:
             "--output",
             abs_export_path,
         ]
-
-        process = subprocess.run(
+        with subprocess.Popen(
             blender_args,
-            text=True,
-            stderr=subprocess.STDOUT,
-            check=False,
-        )
-        print(process.stdout)
-        print(f"-- export end --- : {blender_args}")
+            stdout=subprocess.PIPE,
+            encoding="UTF-8",
+            cwd=str(exec_script_dir),
+        ) as proc:
+            print(proc.stdout.read())
+
+        print("-- export end --- ")
 
 
 if __name__ == "__main__":
@@ -84,4 +85,4 @@ if __name__ == "__main__":
         export_settings = settings.export_settings
         export_settings.export_path = output
 
-        settings.export(context)
+        run_export_process(context)
