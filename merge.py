@@ -24,8 +24,6 @@ def merge_objects(context: bpy_types.Context, collection: bpy.types.Collection) 
         bpy.ops.object.select_all(action="DESELECT")
 
         for obj in merge_targets:
-            print(f"obj:{obj.name}")
-
             # Normalize Basis name
             shapekeys = obj.data.shape_keys
             if shapekeys is not None and len(shapekeys.key_blocks) > 0:
