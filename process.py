@@ -22,6 +22,7 @@ def start_foreground_export(context: bpy.types.Context) -> None:
 
 
 def start_background_export(context: bpy.types.Context) -> None:
+    """Function to start background export"""
     export_settings = context.scene.yfx_exporter_settings.export_settings
     abs_export_path = bpy.path.abspath(export_settings.export_path)
 
@@ -54,12 +55,15 @@ def start_background_export(context: bpy.types.Context) -> None:
         ) as proc:
             print(proc.stdout.read())
 
+            # Check and raise ExportError if there is an error in stderr
             msg_stderr = proc.stderr.read()
             if msg_stderr:
                 raise ExportError(msg_stderr)
 
 
 if __name__ == "__main__":
+    """Entry point when the script is executed directly in sub process"""
+
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", type=str)
 
