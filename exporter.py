@@ -102,11 +102,6 @@ class Exporter:
         export_settings = settings.export_settings
         collection_settings = export_settings.collections
 
-        # Check file path error
-        if export_settings.export_path == "":
-            error_msg = "Invalid path"
-            raise ExportError(error_msg)
-
         # Convert object to mesh and Apply modifiers
         apply_all_objects(context)
 

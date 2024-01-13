@@ -6,7 +6,7 @@ import bpy_extras
 import bpy_types
 
 from .exporter import ExportError
-from .process import start_background_export
+from .process import start_background_export, start_foreground_export
 from .shapekey import update_active_collection_shapekeys
 from .utils import update_active_setting_items, update_all_setting_items
 from .validator import ErrorCategory, validate
@@ -251,6 +251,10 @@ class YFX_EXPORTER_OT_export_fbx(bpy.types.Operator):
         return context.mode == "OBJECT"
 
     def execute(self, context: bpy.types.Context) -> set:
+        scn = context.scene
+        settings = scn.yfx_exporter_settings
+        export_settings = settings.export_settings
+
         update_all_setting_items(context)
 
         exist_error = False
@@ -263,7 +267,10 @@ class YFX_EXPORTER_OT_export_fbx(bpy.types.Operator):
 
         if not exist_error:
             try:
-                start_background_export(context)
+                if export_settings.use_main_process_export:
+                    start_foreground_export(context)
+                else:
+                    start_background_export(context)
             except ExportError as e:
                 self.report({"ERROR"}, str(e))
             else:

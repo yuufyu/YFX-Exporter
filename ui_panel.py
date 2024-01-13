@@ -253,6 +253,27 @@ class YFX_EXPORTER_PT_fbx_export_settings_bake_animation_panel(
         layout.prop(fbx_export_settings, "bake_anim_simplify_factor")
 
 
+class YFX_EXPORTER_PT_fbx_export_settings_custom(
+    View3dSidePanel,
+    bpy.types.Panel,
+):
+    bl_label = "Custom"
+    bl_idname = "YFX_EXPORTER_PT_fbx_export_settings_custom"
+    bl_parent_id = "YFX_EXPORTER_PT_fbx_export_settings_main_panel"
+
+    def draw(self, context: bpy_types.Context) -> None:
+        scn = context.scene
+        settings = scn.yfx_exporter_settings
+        export_settings = settings.export_settings
+        layout = self.layout
+        layout.use_property_split = True
+        layout.use_property_decorate = False  # No animation.
+
+        row = layout.row()
+        row.prop(export_settings, "use_main_process_export")
+        row.label(text="", icon="ERROR")
+
+
 class YFX_EXPORTER_PT_collection_panel(View3dSidePanel, bpy.types.Panel):
     bl_label = "Merge Collections"
     bl_idname = "YFX_EXPORTER_PT_collection_panel"

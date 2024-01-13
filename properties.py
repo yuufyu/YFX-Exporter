@@ -369,11 +369,16 @@ class YFX_EXPORTER_PG_export_settings(bpy.types.PropertyGroup):
     )
     export_path: bpy.props.StringProperty()
     temp_path: bpy.props.StringProperty(subtype="DIR_PATH")
+    use_main_process_export: bpy.props.BoolProperty(
+        name="(Warning!)Main Process Export",
+        description="(Warning!)When enabling this option, the export process in the \
+main process will make potentially destructive changes to the current Blender file.",
+        default=False,
+    )
 
 
 class YFX_EXPORTER_PG_settings(bpy.types.PropertyGroup):
     export_settings: bpy.props.PointerProperty(type=YFX_EXPORTER_PG_export_settings)
-    is_subprocess: bpy.props.BoolProperty()
 
 
 def register() -> None:
