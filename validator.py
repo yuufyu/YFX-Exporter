@@ -133,6 +133,10 @@ def check_inconsistent_armature(collection: bpy.types.Collection) -> bool:
     return not (all_equal(obj.find_armature() for obj in get_child_objects(collection)))
 
 
+def check_geometry_node(obj: bpy.types.Object) -> bool:
+    return any(modifier.type == "NODES" for modifier in obj.modifiers)
+
+
 def validate(context: bpy_types.Context) -> list:
     error_list = []
 
@@ -209,6 +213,14 @@ The appearance of the object may change after export.({obj.name})",
                     category=ErrorCategory.WARNING,
                     message=f"The Armature referenced by a modifier is not displayed.\
 Undisplayed Armatures will not be exported.({obj.name})",
+                )
+                error_list.append(err)
+
+            if check_geometry_node(obj):
+                err = ErrorInfo(
+                    code=6,
+                    category=ErrorCategory.WARNING,
+                    message=f"Geometry Node may not be exportable.({obj.name})",
                 )
                 error_list.append(err)
 
