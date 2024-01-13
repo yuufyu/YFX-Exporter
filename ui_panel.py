@@ -319,42 +319,19 @@ class YFX_EXPORTER_PT_collection_setting_panel(View3dSidePanel, bpy.types.Panel)
             row = layout.row(align=True)
             col = row.column(align=True)
 
-            if False:
-                col.box().label(text="error", icon="ERROR")
-            else:
-                col.prop(
-                    item.transform_settings,
-                    "apply_all_transform",
-                    text="Apply All Transform",
-                )
+            col.prop(
+                item.transform_settings,
+                "apply_all_transform",
+                text="Apply All Transform",
+            )
 
-                col.separator()
+            col.separator()
 
-                col.prop(
-                    item.vertex_group_settings,
-                    "delete_vertex_group",
-                    text="Delete Unused Vertex Group",
-                )
-
-                col.separator()
-
-                col.prop(
-                    item.warning_settings,
-                    "check_warnings",
-                    text="Check for Warnings",
-                )
-
-                if item.warning_settings.check_warnings:
-                    col.prop(
-                        item.warning_settings,
-                        "check_armature_exist",
-                        text="Check if Armature Exists",
-                    )
-                    col.prop(
-                        item.warning_settings,
-                        "check_vertices_with_no_weights",
-                        text="Check Vertices with No Weights",
-                    )
+            col.prop(
+                item.vertex_group_settings,
+                "delete_vertex_group",
+                text="Delete Unused Vertex Group",
+            )
 
 
 class YFX_EXPORTER_UL_shapekey(bpy.types.UIList):
