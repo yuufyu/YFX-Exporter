@@ -85,6 +85,32 @@ def check_nest_collections(
     )
 
 
+def check_vertex_count_based_on_shape_with_shapekeys(obj: bpy.types.Object) -> bool:
+    # Check if there are more than 1 shape keys
+    if obj.data.shape_keys and len(obj.data.shape_keys.key_blocks) > 1:
+        # Check if a Bevel modifier with limit_method='ANGLE' is present
+        for modifier in obj.modifiers:
+            if modifier.type == "BEVEL" and modifier.limit_method == "ANGLE":
+                return True
+
+    return False
+
+
+def check_armature_modifier_order(obj: bpy.types.Object) -> bool:
+    # Function to check if Armature modifier is not at the bottom
+    return any(modifier.type == "ARMATURE" for modifier in obj.modifiers[:-1])
+
+
+# Function to check if the referenced Armature is hidden
+def check_hidden_armature(obj: bpy.types.Object) -> bool:
+    # Find the Armature modifier
+    armature = obj.find_armature()
+    if armature:
+        return not (armature.visible_get())
+
+    return False
+
+
 def validate(context: bpy_types.Context) -> list:
     error_list = []
 
@@ -123,6 +149,32 @@ Settings of child collections will be ignored.({nested_collections_str})",
                     category=ErrorCategory.ERROR,
                     message=f"The object belongs to multiple collections. \
 The appearance of the object may change after export.({obj.name})",
+                )
+                error_list.append(err)
+
+            if check_vertex_count_based_on_shape_with_shapekeys(obj):
+                err = ErrorInfo(
+                    code=3,
+                    category=ErrorCategory.ERROR,
+                    message=f"Cannot set a modifier that changes the vertex count\
+ based on shape on a mesh with shape keys.({obj.name})",
+                )
+                error_list.append(err)
+
+            if check_armature_modifier_order(obj):
+                err = ErrorInfo(
+                    code=4,
+                    category=ErrorCategory.WARNING,
+                    message=f"Armature modifier is not set at the bottom.({obj.name})",
+                )
+                error_list.append(err)
+
+            if check_hidden_armature(obj):
+                err = ErrorInfo(
+                    code=8,
+                    category=ErrorCategory.WARNING,
+                    message=f"The Armature referenced by a modifier is not displayed.\
+Undisplayed Armatures will not be exported.({obj.name})",
                 )
                 error_list.append(err)
 
