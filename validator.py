@@ -114,4 +114,16 @@ Settings of child collections will be ignored.({nested_collections_str})",
         )
         error_list.append(err)
 
+    # Check visible meshes
+    for obj in scn.objects:
+        if obj.visible_get() and obj.type == "MESH":
+            if check_multiple_collections(obj):
+                err = ErrorInfo(
+                    code=1,
+                    category=ErrorCategory.ERROR,
+                    message=f"The object belongs to multiple collections. \
+The appearance of the object may change after export.({obj.name})",
+                )
+                error_list.append(err)
+
     return error_list
