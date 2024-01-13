@@ -9,6 +9,7 @@ from .exporter import ExportError
 from .process import start_background_export
 from .shapekey import update_active_collection_shapekeys
 from .utils import update_active_setting_items, update_all_setting_items
+from .validator import validate
 
 
 def list_actions_move(items: bpy.types.AnyType, index: int, action: str) -> tuple:
@@ -258,4 +259,28 @@ class YFX_EXPORTER_OT_export_fbx(bpy.types.Operator):
         else:
             self.report({"INFO"}, "FBX exported successfully!")
 
+        return {"FINISHED"}
+
+
+class YFX_EXPORTER_OT_check_model(bpy.types.Operator):
+    bl_idname = "yfx_exporter.check_model"
+    bl_label = "Check model"
+    bl_description = "A validation check on the models in the scene,\
+ ensuring their exportability."
+
+    @classmethod
+    def poll(cls, context: bpy.types.Context) -> bool:
+        return context.mode == "OBJECT"
+
+    def execute(self, context: bpy.types.Context) -> set:
+        results = validate(context)
+        if len(results) > 0:
+            for res in results:
+                self.report({"ERROR"}, res.message)
+        else:
+            self.report(
+                {"INFO"},
+                "[Validation Successful]\
+All models in the scene have passed the exportability check successfully. ",
+            )
         return {"FINISHED"}

@@ -84,6 +84,9 @@ class YFX_EXPORTER_PT_export_panel(View3dSidePanel, bpy.types.Panel):
             icon="FILE_FOLDER",
         ).filepath = settings.export_path
 
+        row = layout.row(align=True)
+        row.operator("yfx_exporter.check_model", text="Check Model", icon="ERROR")
+
 
 class YFX_EXPORTER_PT_fbx_export_settings_main_panel(View3dSidePanel, bpy.types.Panel):
     bl_label = "FBX settings"
