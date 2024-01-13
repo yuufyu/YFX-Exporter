@@ -1,5 +1,7 @@
 from dataclasses import dataclass
 from enum import Enum
+from itertools import groupby
+from typing import Generator
 
 import bpy
 import bpy_types
@@ -15,6 +17,22 @@ class ErrorInfo:
     code: int
     category: ErrorCategory
     message: str
+
+
+def all_equal(iterable):
+    g = groupby(iterable)
+    return next(g, True) and not next(g, False)
+
+
+def get_child_objects(
+    collection: bpy.types.Collection,
+) -> Generator[bpy.types.Object, None, None]:
+    for obj in collection.objects:
+        if obj.visible_get() and obj.type == "MESH":
+            yield obj
+
+    for c in collection.children:
+        yield from get_child_objects(c)
 
 
 def check_fbx_path(path: str) -> bool:
@@ -111,6 +129,10 @@ def check_hidden_armature(obj: bpy.types.Object) -> bool:
     return False
 
 
+def check_inconsistent_armature(collection: bpy.types.Collection) -> bool:
+    return not (all_equal(obj.find_armature() for obj in get_child_objects(collection)))
+
+
 def validate(context: bpy_types.Context) -> list:
     error_list = []
 
@@ -139,6 +161,18 @@ def validate(context: bpy_types.Context) -> list:
 Settings of child collections will be ignored.({nested_collections_str})",
         )
         error_list.append(err)
+
+    # Check Collections
+    for c in collection_settings:
+        collection = c.collection_ptr
+        if collection and check_inconsistent_armature(collection):
+            err = ErrorInfo(
+                code=7,
+                category=ErrorCategory.WARNING,
+                message=f"Inconsistent settings for Armature within the collection.\
+Objects may not follow bones after export.({collection.name})",
+            )
+            error_list.append(err)
 
     # Check visible meshes
     for obj in scn.objects:
