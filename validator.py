@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from enum import Enum
 from itertools import groupby
-from typing import Generator
+from typing import Generator, Iterable
 
 import bpy
 import bpy_types
@@ -19,7 +19,7 @@ class ErrorInfo:
     message: str
 
 
-def all_equal(iterable):
+def all_equal(iterable: Iterable[bpy.types.AnyType]) -> bool:
     g = groupby(iterable)
     return next(g, True) and not next(g, False)
 
