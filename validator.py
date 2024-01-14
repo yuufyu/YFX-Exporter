@@ -5,6 +5,7 @@ from typing import Generator, Iterable
 
 import bpy
 import bpy_types
+from bpy.app.translations import pgettext_tip as tip_
 
 
 class ErrorCategory(Enum):
@@ -149,7 +150,7 @@ def validate(context: bpy_types.Context) -> list:
         err = ErrorInfo(
             code=2,
             category=ErrorCategory.ERROR,
-            message="Invalid FBX output path.",
+            message="Invalid FBX output path",
         )
         error_list.append(err)
 
@@ -161,8 +162,10 @@ def validate(context: bpy_types.Context) -> list:
         err = ErrorInfo(
             code=17,
             category=ErrorCategory.WARNING,
-            message=f"Merging collections with parent-child relationships.\
-Settings of child collections will be ignored.({nested_collections_str})",
+            message=tip_(
+                "Child collection '%s' settings are ignored as the parent collection is set as the merge target",
+            )
+            % nested_collections_str,
         )
         error_list.append(err)
 
@@ -173,8 +176,10 @@ Settings of child collections will be ignored.({nested_collections_str})",
             err = ErrorInfo(
                 code=7,
                 category=ErrorCategory.WARNING,
-                message=f"Inconsistent settings for Armature within the collection.\
-Objects may not follow bones after export.({collection.name})",
+                message=tip_(
+                    "Armature settings for objects in '%s' are not consistent. Some meshes may not follow bones after export",
+                )
+                % collection.name,
             )
             error_list.append(err)
 
@@ -185,8 +190,10 @@ Objects may not follow bones after export.({collection.name})",
                 err = ErrorInfo(
                     code=1,
                     category=ErrorCategory.ERROR,
-                    message=f"The object belongs to multiple collections. \
-The appearance of the object may change after export.({obj.name})",
+                    message=tip_(
+                        "'%s' belongs to multiple collections. The object's appearance may change after export",
+                    )
+                    % obj.name,
                 )
                 error_list.append(err)
 
@@ -194,8 +201,10 @@ The appearance of the object may change after export.({obj.name})",
                 err = ErrorInfo(
                     code=3,
                     category=ErrorCategory.ERROR,
-                    message=f"Cannot set a modifier that changes the vertex count\
- based on shape on a mesh with shape keys.({obj.name})",
+                    message=tip_(
+                        "'%s' has a shapekey with a modifier changing vertex count based on shape",
+                    )
+                    % obj.name,
                 )
                 error_list.append(err)
 
@@ -203,7 +212,10 @@ The appearance of the object may change after export.({obj.name})",
                 err = ErrorInfo(
                     code=4,
                     category=ErrorCategory.WARNING,
-                    message=f"Armature modifier is not set at the bottom.({obj.name})",
+                    message=tip_(
+                        "Armature modifier in '%s' should be set at the bottom",
+                    )
+                    % obj.name,
                 )
                 error_list.append(err)
 
@@ -211,8 +223,10 @@ The appearance of the object may change after export.({obj.name})",
                 err = ErrorInfo(
                     code=8,
                     category=ErrorCategory.WARNING,
-                    message=f"The Armature referenced by a modifier is not displayed.\
-Undisplayed Armatures will not be exported.({obj.name})",
+                    message=tip_(
+                        "Armature '%s' referenced by modifiers will not be exported as it's hidden",
+                    )
+                    % obj.find_armature().name,
                 )
                 error_list.append(err)
 
@@ -220,7 +234,8 @@ Undisplayed Armatures will not be exported.({obj.name})",
                 err = ErrorInfo(
                     code=6,
                     category=ErrorCategory.WARNING,
-                    message=f"Geometry Node may not be exportable.({obj.name})",
+                    message=tip_("'%s''s GeometryNode may not be exportable")
+                    % obj.name,
                 )
                 error_list.append(err)
 

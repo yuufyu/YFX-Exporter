@@ -12,10 +12,24 @@ class YFX_EXPORTER_PG_warning_settings(bpy.types.PropertyGroup):
 
 class YFX_EXPORTER_PG_shapekey_settings(bpy.types.PropertyGroup):
     name: bpy.props.StringProperty()
-    separate_shapekey: bpy.props.BoolProperty(default=False)
-    separate_shapekey_left: bpy.props.StringProperty()
-    separate_shapekey_right: bpy.props.StringProperty()
-    delete_shapekey: bpy.props.BoolProperty(default=False)
+    separate_shapekey: bpy.props.BoolProperty(
+        name="Separate Shapekeys L/R",
+        description="Split Shapekeys Left and Right Centered at the Object's Origin",
+        default=False,
+    )
+    separate_shapekey_left: bpy.props.StringProperty(
+        name="Left",
+        description="Name of the shapekey on the left",
+    )
+    separate_shapekey_right: bpy.props.StringProperty(
+        name="Right",
+        description="Name of the shapekey on the right",
+    )
+    delete_shapekey: bpy.props.BoolProperty(
+        name="Delete Source Shapekey",
+        description="Deletes the source shapekey used for splitting",
+        default=False,
+    )
 
 
 class YFX_EXPORTER_PG_collection_shapekey_settings(bpy.types.PropertyGroup):
@@ -26,11 +40,19 @@ class YFX_EXPORTER_PG_collection_shapekey_settings(bpy.types.PropertyGroup):
 
 
 class YFX_EXPORTER_PG_transform_settings(bpy.types.PropertyGroup):
-    apply_all_transform: bpy.props.BoolProperty(default=False)
+    apply_all_transform: bpy.props.BoolProperty(
+        name="Apply All Transform",
+        description="Apply the object's transformation to its data",
+        default=False,
+    )
 
 
 class YFX_EXPORTER_PG_vertex_group_settings(bpy.types.PropertyGroup):
-    delete_vertex_group: bpy.props.BoolProperty(default=True)
+    delete_vertex_group: bpy.props.BoolProperty(
+        name="Delete Unused Vertex Group",
+        description="Deletes vertex groups not assigned to deform bones",
+        default=True,
+    )
 
 
 class YFX_EXPORTER_PG_collection_settings(bpy.types.PropertyGroup):
@@ -372,7 +394,7 @@ class YFX_EXPORTER_PG_export_settings(bpy.types.PropertyGroup):
     use_main_process_export: bpy.props.BoolProperty(
         name="(Warning!)Main Process Export",
         description="(Warning!)When enabling this option, the export process in the \
-main process will make potentially destructive changes to the current Blender file.",
+main process will make potentially destructive changes to the current Blender file",
         default=False,
     )
 
