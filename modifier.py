@@ -90,7 +90,7 @@ def main_apply_modifiers(obj: bpy.types.Object) -> None:
     Args:
         obj (bpy.types.Object): The target object.
     """
-    if len(obj.modifiers) < 1:
+    if sum(m.type != "ARMATURE" for m in obj.modifiers) == 0:
         return
     shapekeys = obj.data.shape_keys
     if shapekeys is not None and len(shapekeys.key_blocks) > 0:
