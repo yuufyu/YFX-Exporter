@@ -69,7 +69,7 @@ class YFX_EXPORTER_PT_export_panel(View3dSidePanel, bpy.types.Panel):
         col = row.column(align=True)
         row = col.row(align=True)
         row.scale_y = 1.5
-        row.operator("yfx_exporter.export_fbx", text="Export FBX", icon="CUBE")
+        row.operator("yfx_exporter.export_fbx", icon="CUBE")
 
         row = layout.row(align=True)
         if settings.export_path == "":
@@ -85,7 +85,7 @@ class YFX_EXPORTER_PT_export_panel(View3dSidePanel, bpy.types.Panel):
         ).filepath = settings.export_path
 
         row = layout.row(align=True)
-        row.operator("yfx_exporter.check_model", text="Check Model", icon="ERROR")
+        row.operator("yfx_exporter.check_model", icon="ERROR")
 
 
 class YFX_EXPORTER_PT_fbx_export_settings_main_panel(View3dSidePanel, bpy.types.Panel):
@@ -290,7 +290,6 @@ class YFX_EXPORTER_PT_collection_panel(View3dSidePanel, bpy.types.Panel):
         row.operator_menu_enum(
             "yfx_exporter.add_collection",
             "user_collections",
-            text="Add Collection",
             icon="ADD",
         )
 
@@ -343,7 +342,6 @@ class YFX_EXPORTER_PT_collection_setting_panel(View3dSidePanel, bpy.types.Panel)
             col.prop(
                 item.transform_settings,
                 "apply_all_transform",
-                text="Apply All Transform",
             )
 
             col.separator()
@@ -351,7 +349,6 @@ class YFX_EXPORTER_PT_collection_setting_panel(View3dSidePanel, bpy.types.Panel)
             col.prop(
                 item.vertex_group_settings,
                 "delete_vertex_group",
-                text="Delete Unused Vertex Group",
             )
 
 
@@ -392,7 +389,6 @@ class YFX_EXPORTER_PT_shapekey_settings_panel(View3dSidePanel, bpy.types.Panel):
         row.operator(
             "yfx_exporter.update_shapekey_list",
             icon="FILE_REFRESH",
-            text="Update Shapekeys",
         )
 
         if len_collections > 0 and 0 <= settings.collection_index < len_collections:
@@ -450,7 +446,6 @@ class YFX_EXPORTER_PT_shapekey_settings_panel(View3dSidePanel, bpy.types.Panel):
                 col.prop(
                     shapekey_setting,
                     "separate_shapekey",
-                    text="Separate Shapekeys L/R",
                 )
                 if shapekey_setting.separate_shapekey:
                     col.use_property_split = True
@@ -458,15 +453,12 @@ class YFX_EXPORTER_PT_shapekey_settings_panel(View3dSidePanel, bpy.types.Panel):
                     col.prop(
                         shapekey_setting,
                         "separate_shapekey_left",
-                        text="Left",
                     )
                     col.prop(
                         shapekey_setting,
                         "separate_shapekey_right",
-                        text="Right",
                     )
                     col.prop(
                         shapekey_setting,
                         "delete_shapekey",
-                        text="Delete Source Shapekey",
                     )

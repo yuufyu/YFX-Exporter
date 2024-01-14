@@ -281,9 +281,9 @@ class YFX_EXPORTER_OT_export_fbx(bpy.types.Operator):
 
 class YFX_EXPORTER_OT_check_model(bpy.types.Operator):
     bl_idname = "yfx_exporter.check_model"
-    bl_label = "Check model"
+    bl_label = "Check Model"
     bl_description = "A validation check on the models in the scene,\
- ensuring their exportability."
+ ensuring their exportability"
 
     @classmethod
     def poll(cls, context: bpy.types.Context) -> bool:
@@ -297,7 +297,7 @@ class YFX_EXPORTER_OT_check_model(bpy.types.Operator):
         else:
             self.report(
                 {"INFO"},
-                "[Validation Successful]\
-All models in the scene have passed the exportability check successfully. ",
+                "[Validation Successful] \
+All models in the scene have passed the exportability check successfully",
             )
         return {"FINISHED"}
