@@ -4,37 +4,37 @@ translation_dict = {
     "en_US": {
         (
             "*",
-            "%s belongs to multiple collections. The object's appearance may change after export",
-        ): "%s belongs to multiple collections. The object's appearance may change after export",
+            "'%s' belongs to multiple collections. The object's appearance may change after export",
+        ): "'%s' belongs to multiple collections. The object's appearance may change after export",
         ("*", "Invalid FBX output path"): "Invalid FBX output path",
         (
             "*",
-            "%s has a shapekey with a modifier changing vertex count based on shape",
-        ): "%s has a shapekey with a modifier changing vertex count based on shape",
+            "'%s' has a shapekey with a modifier changing vertex count based on shape",
+        ): "'%s' has a shapekey with a modifier changing vertex count based on shape",
         (
             "*",
-            "Armature modifier in %s should be set at the bottom",
-        ): "Armature modifier in %s should be set at the bottom",
+            "Armature modifier in '%s' should be set at the bottom",
+        ): "Armature modifier in '%s' should be set at the bottom",
         (
             "*",
             "Transform in Armature (%s) is not reset",
         ): "Transform in Armature (%s) is not reset",
         (
             "*",
-            "%s's GeometryNode may not be exportable",
-        ): "%s's GeometryNode may not be exportable",
+            "'%s''s GeometryNode may not be exportable",
+        ): "'%s''s GeometryNode may not be exportable",
         (
             "*",
-            "Armature settings for objects in %s are not consistent. Some meshes may not follow bones after export",
-        ): "Armature settings for objects in %s are not consistent. Some meshes may not follow bones after export",
+            "Armature settings for objects in '%s' are not consistent. Some meshes may not follow bones after export",
+        ): "Armature settings for objects in '%s' are not consistent. Some meshes may not follow bones after export",
         (
             "*",
             "Armature '%s' referenced by modifiers will not be exported as it's hidden",
         ): "Armature '%s' referenced by modifiers will not be exported as it's hidden",
         (
             "*",
-            "%s with Auto Smooth set may have normals changed after export",
-        ): "%s with Auto Smooth set may have normals changed after export",
+            "'%s' with Auto Smooth set may have normals changed after export",
+        ): "'%s' with Auto Smooth set may have normals changed after export",
         (
             "*",
             "Object '%s' without an Armature modifier is present",
@@ -45,8 +45,8 @@ translation_dict = {
         ): "Shapekeys of Text, Surface, and Curve will be deleted",
         (
             "*",
-            "Child collection %s settings are ignored as the parent collection is set as the merge target",
-        ): "Child collection %s settings are ignored as the parent collection is set as the merge target",
+            "Child collection '%s' settings are ignored as the parent collection is set as the merge target",
+        ): "Child collection '%s' settings are ignored as the parent collection is set as the merge target",
         ("*", "Check Model"): "Check Model",
         ("*", "FBX settings"): "FBX settings",
         ("*", "Merge Collections"): "Merge Collections",
@@ -91,28 +91,28 @@ translation_dict = {
     "ja_JP": {
         (
             "*",
-            "%s belongs to multiple collections. The object's appearance may change after export",
-        ): "%sが複数のコレクションに所属しています。出力後、オブジェクトの見た目が変わる場合があります",
+            "'%s' belongs to multiple collections. The object's appearance may change after export",
+        ): "'%s'が複数のコレクションに所属しています。出力後、オブジェクトの見た目が変わる場合があります",
         ("*", "Invalid FBX output path"): "不正なFBX出力パスです",
         (
             "*",
-            "%s has a shapekey with a modifier changing vertex count based on shape",
-        ): "シェイプキーが存在する%sに形状で頂点数が変わるモディファイアが設定されています",
+            "'%s' has a shapekey with a modifier changing vertex count based on shape",
+        ): "シェイプキーが存在する'%s'に形状で頂点数が変わるモディファイアが設定されています",
         (
             "*",
-            "Armature modifier in %s should be set at the bottom",
-        ): "%sのArmatureモディファイアは一番下に設定してください",
+            "Armature modifier in '%s' should be set at the bottom",
+        ): "'%s'のArmatureモディファイアは一番下に設定してください",
         (
             "*",
             "Transform in Armature (%s) is not reset",
         ): "Armature(%s)のTransformがリセットされていません",
         (
             "*",
-            "%s's GeometryNode may not be exportable",
-        ): "%sのGeometryNodeはエクスポートできない場合があります",
+            "'%s''s GeometryNode may not be exportable",
+        ): "'%s'のGeometryNodeはエクスポートできない場合があります",
         (
             "*",
-            "Armature settings for objects in %s are not consistent. Some meshes may not follow bones after export",
+            "Armature settings for objects in '%s' are not consistent. Some meshes may not follow bones after export",
         ): "'%s'に含まれるオブジェクトのArmatureの設定が統一されていません。出力後、一部のメッシュがボーンに追従しない場合があります",
         (
             "*",
@@ -120,8 +120,8 @@ translation_dict = {
         ): "モディファイアから参照しているArmature'%s'は非表示のため出力されません",
         (
             "*",
-            "%s with Auto Smooth set may have normals changed after export",
-        ): "自動スムース(Auto Smooth)が設定されている%sは、出力後に法線が変わる場合があります",
+            "'%s' with Auto Smooth set may have normals changed after export",
+        ): "自動スムース(Auto Smooth)が設定されている'%s'は、出力後に法線が変わる場合があります",
         (
             "*",
             "Object '%s' without an Armature modifier is present",
@@ -132,8 +132,8 @@ translation_dict = {
         ): "Text, Surfece, Curveのシェイプキーは削除されます",
         (
             "*",
-            "Child collection %s settings are ignored as the parent collection is set as the merge target",
-        ): "親コレクションをマージ対象に設定しているため、子コレクションである%sの設定は無視されます",
+            "Child collection '%s' settings are ignored as the parent collection is set as the merge target",
+        ): "親コレクションをマージ対象に設定しているため、子コレクションである'%s'の設定は無視されます",
         ("*", "Check Model"): "モデルのチェック",
         ("*", "FBX settings"): "FBX設定",
         ("*", "Merge Collections"): "マージコレクション",

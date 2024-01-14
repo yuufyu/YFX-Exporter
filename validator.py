@@ -150,7 +150,7 @@ def validate(context: bpy_types.Context) -> list:
         err = ErrorInfo(
             code=2,
             category=ErrorCategory.ERROR,
-            message="Invalid FBX output path.",
+            message="Invalid FBX output path",
         )
         error_list.append(err)
 
@@ -163,7 +163,7 @@ def validate(context: bpy_types.Context) -> list:
             code=17,
             category=ErrorCategory.WARNING,
             message=tip_(
-                "Child collection %s settings are ignored as the parent collection is set as the merge target",
+                "Child collection '%s' settings are ignored as the parent collection is set as the merge target",
             )
             % nested_collections_str,
         )
@@ -177,7 +177,7 @@ def validate(context: bpy_types.Context) -> list:
                 code=7,
                 category=ErrorCategory.WARNING,
                 message=tip_(
-                    "Armature settings for objects in %s are not consistent. Some meshes may not follow bones after export",
+                    "Armature settings for objects in '%s' are not consistent. Some meshes may not follow bones after export",
                 )
                 % collection.name,
             )
@@ -191,7 +191,7 @@ def validate(context: bpy_types.Context) -> list:
                     code=1,
                     category=ErrorCategory.ERROR,
                     message=tip_(
-                        "%s belongs to multiple collections. The object's appearance may change after export",
+                        "'%s' belongs to multiple collections. The object's appearance may change after export",
                     )
                     % obj.name,
                 )
@@ -202,7 +202,7 @@ def validate(context: bpy_types.Context) -> list:
                     code=3,
                     category=ErrorCategory.ERROR,
                     message=tip_(
-                        "%s has a shapekey with a modifier changing vertex count based on shape",
+                        "'%s' has a shapekey with a modifier changing vertex count based on shape",
                     )
                     % obj.name,
                 )
@@ -212,7 +212,9 @@ def validate(context: bpy_types.Context) -> list:
                 err = ErrorInfo(
                     code=4,
                     category=ErrorCategory.WARNING,
-                    message=tip_("Armature modifier in %s should be set at the bottom")
+                    message=tip_(
+                        "Armature modifier in '%s' should be set at the bottom",
+                    )
                     % obj.name,
                 )
                 error_list.append(err)
@@ -224,7 +226,7 @@ def validate(context: bpy_types.Context) -> list:
                     message=tip_(
                         "Armature '%s' referenced by modifiers will not be exported as it's hidden",
                     )
-                    % obj.name,
+                    % obj.find_armature().name,
                 )
                 error_list.append(err)
 
@@ -232,7 +234,8 @@ def validate(context: bpy_types.Context) -> list:
                 err = ErrorInfo(
                     code=6,
                     category=ErrorCategory.WARNING,
-                    message=tip_("%s's GeometryNode may not be exportable") % obj.name,
+                    message=tip_("'%s''s GeometryNode may not be exportable")
+                    % obj.name,
                 )
                 error_list.append(err)
 
