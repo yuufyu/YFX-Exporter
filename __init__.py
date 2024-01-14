@@ -26,13 +26,11 @@ bl_info = {
     "name": "YFX Exporter",
     "author": "yuufyu",
     "description": "A plugin for FBX export with additional processing \
-        like applying modifiers and merging objects in a non-destructive way.",
+like applying modifiers and merging objects in a non-destructive way.",
     "blender": (4, 0, 2),
     "version": (0, 0, 1),
     "location": "View 3D > SidePanel > YFX > YFX Exporter",
-    "warning": "This plugin is under development. \
-        Exporting objects with AutoSmooth may result in different normals \
-        than in the Blender scene.",
+    "warning": "This plugin is under development.",
     "category": "Import-Export",
 }
 
