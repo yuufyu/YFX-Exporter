@@ -6,15 +6,14 @@ from pathlib import Path
 
 import bpy
 
-from yfx_exporter.exporter import Exporter, ExportError
+from yfx_exporter.exporter import ExportError, export
 
 
 def run_export_process(context: bpy.types.Context) -> None:
     scn = context.scene
     settings = scn.yfx_exporter_settings
 
-    exporter = Exporter()
-    exporter.export(context, settings)
+    export(context, settings)
 
 
 def start_foreground_export(context: bpy.types.Context) -> None:
