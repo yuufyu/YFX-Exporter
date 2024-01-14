@@ -17,7 +17,8 @@
 
 """YFX Exporter.
 
-FBX exporter for character modeling.
+A plugin for FBX export with additional processing
+ like applying modifiers and merging objects in a non-destructive way.
 """
 
 from . import auto_load
