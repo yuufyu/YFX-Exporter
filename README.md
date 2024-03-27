@@ -1,7 +1,7 @@
 # YFX Exporter
 
 [![GitHub license](https://img.shields.io/github/license/yuufyu/YFX-Exporter)](https://github.com/yuufyu/YFX-Exporter/blob/main/LICENSE)
-[![Blender Version](https://img.shields.io/badge/Blender-4.0.2-blue)](https://www.blender.org/)
+[![Blender Version](https://img.shields.io/badge/Blender-4.1.0-blue)](https://www.blender.org/)
 
 ## Overview
 A plugin for FBX export with additional processing like applying modifiers and merging objects in a non-destructive way.
@@ -38,9 +38,6 @@ When the user presses the "Export FBX" button, the addon copies the current scen
 ## Usage
 "View 3D > SidePanel > YFX > YFX Exporter"  
 Access export processing initiation and configuration through the "YFX" tab in the Side Panel of the Viewport 3D screen.
-
-## Known Issues
-If a Mesh object within the "Merge Collection" has Auto Smooth enabled, the normals may change after exporting.
 
 ## License
 This plugin is licensed under the GNU General Public License (GPL) version 3. For details, see the [LICENSE](https://github.com/yuufyu/YFX-Exporter/blob/main/LICENSE) file.

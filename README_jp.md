@@ -1,7 +1,7 @@
 # YFX Exporter
 
 [![GitHub license](https://img.shields.io/github/license/yuufyu/YFX-Exporter)](https://github.com/yuufyu/YFX-Exporter/blob/main/LICENSE)
-[![Blender Version](https://img.shields.io/badge/Blender-4.0.2-blue)](https://www.blender.org/)
+[![Blender Version](https://img.shields.io/badge/Blender-4.1.0-blue)](https://www.blender.org/)
 
 ## 概要
 FBXエクスポートのためのプラグインで、モディファイアの適用やオブジェクトのマージなどを非破壊的に行います。
@@ -38,9 +38,6 @@ FBXエクスポートのためのプラグインで、モディファイアの�
 ## 使い方
 "View 3D > SidePanel > YFX > YFX Exporter"  
 ビューポート3D画面のサイドパネルの「YFX」タブからエクスポート処理の開始と設定ができます。
-
-## 既知の問題
-「Merge Collection」内にAuto Smoothが有効なMeshオブジェクトが存在する場合、エクスポート後に法線が変わる可能性があります。
 
 ## ライセンス
 このプラグインはGNU General Public License（GPL）バージョン3の下でライセンスされています。詳細については[LICENSE](https://github.com/yuufyu/YFX-Exporter/blob/main/LICENSE)ファイルを参照してください。
